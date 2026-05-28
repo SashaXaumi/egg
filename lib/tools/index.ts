@@ -41,7 +41,7 @@ export class Tool {
     whatsNew?: string;
   }) {
     this.id = id;
-    this.url = url || `https://wasmegg-carpet.netlify.app/${this.id}/`;
+    this.url = url || `https://ferret.netlify.app/${this.id}/`;
     this.title = title;
     this.iconUrl = iconUrl || '';
     this.description = description;
@@ -73,7 +73,7 @@ export class Tool {
 export const tools = [
   new Tool({
     id: 'eicoop',
-    url: 'https://eicoop-carpet.netlify.app/',
+    url: 'https://ferret-coop.netlify.app/',
     title: 'CoopTracker',
     iconUrl: iconURL('wasmegg/eicoop.svg'),
     description: 'Coop tracker and contract master list',

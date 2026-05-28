@@ -131,14 +131,10 @@
         <p
           v-for="[href, description] in [
             [
-              `https://wasmegg-carpet.netlify.app/past-contracts/?playerId=${userId}`,
-              'Details of your completed, failed, and missed contracts',
-            ],
-            [
-              `https://wasmegg-carpet.netlify.app/rockets-tracker/?playerId=${userId}`,
+              `https://ferret.netlify.app/rockets-tracker/?playerId=${userId}`,
               'Details of your artifact missions and inventory',
             ],
-            ['https://wasmegg-carpet.netlify.app/', 'More tools'],
+            ['https://ferret.netlify.app/', 'More tools'],
           ]"
           :key="href"
           class="text-xs leading-5"

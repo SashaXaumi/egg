@@ -240,7 +240,7 @@
             </dd>
           </div>
           <a
-            :href="`https://wasmegg-carpet.netlify.app/virtue-companion/?playerId=${userId}`"
+            :href="`https://ferret.netlify.app/virtue-companion/?playerId=${userId}`"
             target="_blank"
             class="flex items-center justify-center space-x-0.5 text-xs"
             :class="true ? 'text-green-500 hover:text-green-600' : 'text-gray-500 hover:text-gray-600'"
@@ -635,7 +635,7 @@
           </div>
 
           <a
-            :href="`https://eicoop-carpet.netlify.app/u/${userId}`"
+            :href="`https://ferret-coop.netlify.app/u/${userId}`"
             target="_blank"
             class="flex items-center justify-center space-x-0.5 text-xs text-gray-500 hover:text-gray-600 mt-1"
           >
