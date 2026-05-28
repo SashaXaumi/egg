@@ -1,175 +1,164 @@
 <template>
-  <div class="my-4 bg-white dark:bg-gray-800 shadow overflow-hidden ultrawide:rounded-lg mb-4">
-    <div class="px-4 sm:px-6 py-3 flex items-center space-x-1 bg-gray-50 dark:bg-gray-700">
+  <!--
+    Redesign: Variant C "Your den" from the claude.ai/design "Ferret coop" handoff.
+    The profile card becomes a compact tile grid; scoped under .ferret. The season
+    progress strip is dropped per the design (kept registered + commented below so it
+    can be re-enabled). All <script> logic is preserved.
+  -->
+  <div class="ferret my-4 shadow overflow-hidden ultrawide:rounded-lg mb-4">
+    <!-- Identity -->
+    <div style="padding: 14px 18px 0; display: flex; align-items: center; gap: 8px">
       <base-icon
         :icon-rel-path="hasProPermit ? 'egginc/pro_permit.png' : 'egginc/free_permit.png'"
         :size="128"
-        class="h-4 w-6 flex-shrink-0 -ml-0.5"
+        class="h-4 w-6 flex-shrink-0"
       />
-      <span class="text-base font-serif text-gray-900 dark:text-gray-100">
-        {{ renderNonempty(nickname) }}
-      </span>
+      <span class="display" style="font-size: 18px; color: var(--text-0)">{{ renderNonempty(nickname) }}</span>
     </div>
-    <div
-      class="sm:grid sm:gap-x-8 border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3"
-      :style="{ gridTemplateColumns: 'max-content 1fr' }"
-    >
-      <div>
-        <div class="grid gap-x-3" :style="{ gridTemplateColumns: 'repeat(2, max-content)' }">
-          <dt class="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">Mystical eggs</dt>
-          <dd class="flex flex-wrap items-center">
-            <span class="flex items-center whitespace-nowrap mr-1">
-              <base-icon
-                icon-rel-path="egginc/egg_truth.png"
-                :size="64"
-                class="inline-block align-middle h-4 w-4 -ml-0.5"
-              />
-              <span class="text-sm text-yellow-500">{{ truthEggs }}</span>
-            </span>
-            <span class="flex items-center whitespace-nowrap mr-1">
-              <base-icon
-                icon-rel-path="egginc/egg_of_prophecy.png"
-                :size="64"
-                class="inline-block align-middle h-4 w-4 -ml-0.5"
-              />
-              <span class="text-sm text-yellow-500">{{ prophecyEggs }}</span>
-            </span>
-            <span class="flex items-center whitespace-nowrap">
-              <base-icon icon-rel-path="egginc/egg_soul.png" :size="64" class="inline-block align-middle h-4 w-4" />
-              <span class="text-sm text-purple-500">{{ formatEIValue(soulEggs) }}</span>
-            </span>
-          </dd>
 
-          <dt class="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">Earning bonus</dt>
-          <dd class="flex items-center text-sm space-x-0.5">
-            <span :style="{ color: role.color }">{{ formatEIValue(earningBonus * 100) }}%,</span>
-            <span :style="{ color: role.color }">{{ role.name }}</span>
-            <base-info
-              v-tippy="{
-                content: `This is the 'naked' earning bonus without artifacts. The label after the EB is the corresponding role used in the Egg, Inc. Discord server.`,
-              }"
-            />
-          </dd>
-
-          <dt class="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">Trophies</dt>
-          <dd class="flex items-center text-sm text-gray-900 dark:text-gray-100">
-            {{ trophies }}/95,
-            <base-icon icon-rel-path="egginc/egg_of_prophecy.png" :size="64" class="h-4 w-4" />
-            <span class="text-yellow-500">
-              {{ prophecyEggsProgress.fromTrophies.completed }}/{{ prophecyEggsProgress.fromTrophies.available }}
-            </span>
-          </dd>
-
-          <dt class="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">Daily gifts</dt>
-          <dd class="flex items-center text-sm text-gray-900 dark:text-gray-100">
-            M{{ dailyGifts.onMonth }}D{{ dailyGifts.onDay }},
-            <base-icon icon-rel-path="egginc/egg_of_prophecy.png" :size="64" class="h-4 w-4" />
-            <span class="text-yellow-500">
-              {{ prophecyEggsProgress.fromDailyGifts.completed }}/{{ prophecyEggsProgress.fromDailyGifts.available }}
-            </span>
-          </dd>
-
-          <dt class="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">Contracts</dt>
-          <dd class="flex items-center text-sm text-gray-900 dark:text-gray-100">
-            <base-icon icon-rel-path="egginc/egg_of_prophecy.png" :size="64" class="h-4 w-4 -ml-0.5" />
-            <span class="text-yellow-500">
-              {{ prophecyEggsProgress.fromContracts.completed }}
-            </span>
-          </dd>
-          <dt class="text-sm font-medium whitespace-nowrap text-gray-700 dark:text-gray-300">Seasons</dt>
-          <dd class="flex items-center text-sm text-gray-900 dark:text-gray-100">
-            <base-icon icon-rel-path="egginc/egg_of_prophecy.png" :size="64" class="h-4 w-4 -ml-0.5" />
-            <span class="text-yellow-500">
-              {{ prophecyEggsProgress.fromContractSeasons.completed }}
-            </span>
-          </dd>
-        </div>
-
-        <div class="mt-2 space-y-1">
-          <p class="text-xs text-gray-500 dark:text-gray-400">
-            Age of save data:
-            <auto-refreshed-relative-time :reference-time="backupTime" :without-suffix="true">
-              <template #default="{ relativeTime, referenceTimeFormatted }">
-                <span class="inline-flex items-center text-gray-500 dark:text-gray-400">
-                  {{ relativeTime }}
-                  <base-info
-                    v-tippy="{
-                      content: `
-                        <p>Save last synced to server at <span class='text-blue-300'>${referenceTimeFormatted}</span>.</p>
-
-                        <p class='mt-2'>The game, while active, saves to Egg, Inc.&rsquo;s server every couple of minutes if network condition allows. Other than soon after a fresh launch of the game, such server syncs are unpredictable from the user&rsquo;s point of view. <span class='text-blue-300'>You can force close then reopen the app to reasonably reliably trigger a sync</span> (search for &ldquo;iOS force close app&rdquo; or &ldquo;Android force close app&rdquo; if you need help).</p>
-
-                        <p class='mt-2'>However, even after an app-initiated sync, it may take an unpredicatible amount of time (usually within a minute or so) for the game&rsquo;s server to serve the updated save through its API, which is then picked up by this tool. There is no solution other than <span class='text-blue-300'>refreshing periodically until the fresh save shows up</span>. <span class='text-red-300'>Please do not refresh too fast</span>, which is not helpful, and hammers the server.</p>`,
-                      allowHTML: true,
-                    }"
-                    class="ml-0.5"
-                  />
-                </span>
-              </template>
-            </auto-refreshed-relative-time>
-          </p>
-          <button
-            type="button"
-            class="flex items-center justify-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 focus:outline-none rounded-md !duration-0"
-            @click="triggerRefresh"
-          >
-            <svg class="-ml-px mr-1.5 h-3 w-3 text-gray-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            <span class="text-xs text-gray-100">Refresh page</span>
-          </button>
+    <!-- Your den -->
+    <div style="padding: 10px 18px 0">
+      <div class="section-h">
+        <h2>Your den</h2>
+        <div
+          style="
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+          "
+        >
+          <span class="mono" :style="{ color: role.color }">{{ role.name }}</span>
         </div>
       </div>
+      <div class="den-grid">
+        <div class="den-tile">
+          <base-icon icon-rel-path="egginc/egg_soul.png" :size="64" />
+          <div class="v">{{ formatEIValue(soulEggs) }}</div>
+          <div class="k">Soul</div>
+        </div>
+        <div class="den-tile">
+          <base-icon icon-rel-path="egginc/egg_of_prophecy.png" :size="64" />
+          <div class="v">{{ prophecyEggs }}</div>
+          <div class="k">Prophecy</div>
+        </div>
+        <div class="den-tile">
+          <base-icon icon-rel-path="egginc-extras/icon_golden_egg.png" :size="64" />
+          <div class="v" style="color: var(--gold)">{{ formatEIValue(earningBonus * 100) }}%</div>
+          <div class="k">EB</div>
+        </div>
+        <div class="den-tile">
+          <base-icon icon-rel-path="egginc/icon_shell_script_colored.png" :size="64" />
+          <div class="v">{{ prophecyEggsProgress.fromContracts.completed }}</div>
+          <div class="k">Contracts</div>
+        </div>
+        <div class="den-tile">
+          <base-icon icon-rel-path="egginc/icon_chick.png" :size="64" />
+          <div class="v">{{ prophecyEggsProgress.fromContractSeasons.completed }}</div>
+          <div class="k">Seasons</div>
+        </div>
+        <div class="den-tile">
+          <base-icon icon-rel-path="egginc/pro_permit.png" :size="64" />
+          <div class="v" style="color: var(--leaf)">{{ trophies }}/95</div>
+          <div class="k">Trophies</div>
+        </div>
+      </div>
+    </div>
 
-      <div class="mt-2 sm:mt-0">
-        <p class="text-xs text-green-500 leading-5">Bookmark this page to check all your contracts at any time!</p>
-        <p
+    <!-- Save age + refresh + bookmark links -->
+    <div
+      style="
+        padding: 14px 18px 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 14px;
+        font-size: 12px;
+        color: var(--text-2);
+      "
+    >
+      <span style="display: inline-flex; align-items: center; gap: 4px">
+        Synced
+        <auto-refreshed-relative-time :reference-time="backupTime" :without-suffix="true">
+          <template #default="{ relativeTime, referenceTimeFormatted }">
+            <span class="mono" style="color: var(--text-1); display: inline-flex; align-items: center">
+              {{ relativeTime }} ago
+              <base-info
+                v-tippy="{
+                  content: `<p>Save last synced to server at <span class='text-blue-300'>${referenceTimeFormatted}</span>.</p><p class='mt-2'>Force close then reopen the game to trigger a sync, then refresh here until the fresh save shows up. Please do not refresh too fast.</p>`,
+                  allowHTML: true,
+                }"
+                class="ml-0.5"
+              />
+            </span>
+          </template>
+        </auto-refreshed-relative-time>
+      </span>
+      <button
+        type="button"
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          padding: 4px 10px;
+          border-radius: 999px;
+          background: rgba(251, 191, 36, 0.14);
+          border: 1px solid rgba(251, 191, 36, 0.32);
+          color: var(--gold);
+          font-weight: 700;
+          cursor: pointer;
+        "
+        @click="triggerRefresh"
+      >
+        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        Refresh
+      </button>
+      <span style="flex: 1; min-width: 0" />
+      <span style="display: inline-flex; align-items: center; gap: 12px">
+        <a
           v-for="[href, description] in [
-            [
-              `https://ferret.netlify.app/rockets-tracker/?playerId=${userId}`,
-              'Details of your artifact missions and inventory',
-            ],
+            [`https://ferret.netlify.app/rockets-tracker/?playerId=${userId}`, 'Missions & inventory'],
             ['https://ferret.netlify.app/', 'More tools'],
           ]"
           :key="href"
-          class="text-xs leading-5"
+          :href="href"
+          target="_blank"
+          style="color: var(--cinnamon); white-space: nowrap"
         >
-          <a :href="href" target="_blank" class="text-blue-500 hover:text-blue-600 transition-none">
-            <svg
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              class="inline h-3 w-3 -ml-px mr-0.5 relative -top-px text-blue-500 cursor-pointer select-none"
-            >
-              <path
-                d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
-              />
-              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-            </svg>
-            {{ description }}
-          </a>
-        </p>
-      </div>
+          {{ description }} &#8599;
+        </a>
+      </span>
     </div>
+
     <div
       v-if="soloStatuses.length === 0 && coopParams.length === 0"
-      class="text-sm text-gray-700 dark:text-gray-300 px-4 sm:px-6 py-3 border-t border-gray-200 dark:border-gray-700"
+      style="padding: 14px 18px 0; font-size: 13px; color: var(--text-1)"
     >
       No active contract found in your save. Check back when you have one!
     </div>
+
+    <div class="footer-note"><span class="paw">⌒</span> burrowed by ferrets</div>
   </div>
 
-  <div class="my-4 bg-white dark:bg-gray-800 shadow overflow-hidden ultrawide:rounded-lg mb-4">
-    <season-progress-bar
-      v-if="backup.contracts?.lastCpi?.seasonProgress != null"
-      :backup="backup"
-      :refresh-key="coopRefreshKey"
-    />
-  </div>
+  <!--
+    Season progress strip — dropped per Variant C design. Component kept registered so
+    it can be restored later.
+    <div class="my-4 bg-white dark:bg-gray-800 shadow overflow-hidden ultrawide:rounded-lg mb-4">
+      <season-progress-bar
+        v-if="backup.contracts?.lastCpi?.seasonProgress != null"
+        :backup="backup"
+        :refresh-key="coopRefreshKey"
+      />
+    </div>
+  -->
 
   <template v-for="status in soloStatuses" :key="`${status.userId}:${status.contractId}`">
     <solo-card :status="status" />

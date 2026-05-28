@@ -8,7 +8,8 @@
     <div v-else-if="backup" class="relative -my-px py-px">
       <main>
         <user-dashboard :backup="backup" />
-        <frequently-asked-questions />
+        <!-- FAQ dropped per Variant C redesign (kept on the pre-login landing above):
+        <frequently-asked-questions /> -->
       </main>
       <div
         v-if="loading || error"

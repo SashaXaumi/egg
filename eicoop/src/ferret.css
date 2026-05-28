@@ -329,7 +329,35 @@
 .ferret .den-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
+}
+.ferret .den-tile {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.ferret .den-tile img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+.ferret .den-tile .v {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-0);
+}
+.ferret .den-tile .k {
+  font-size: 9px;
+  color: var(--text-2);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* ───── Footer ───── */

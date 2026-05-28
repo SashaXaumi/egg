@@ -2,7 +2,8 @@
 <template>
   <main class="flex-1 max-w-ultrawide w-full mx-auto mt-2 ultrawide:px-4">
     <coop-card-loader :contract-id="contractId" :coop-code="coopCode" :gradearg="grade" @success="onSuccess" />
-    <frequently-asked-questions />
+    <!-- FAQ dropped per Variant C redesign (component kept registered to re-enable):
+    <frequently-asked-questions /> -->
   </main>
 </template>
 
