@@ -10,7 +10,11 @@ export * from './encode';
 export * from './utils';
 export * from './version';
 
-const API_ROOT = 'https://egg-forwarder.carpet.workers.dev/?url=https://www.auxbrain.com';
+// Same-origin proxy to the Egg, Inc. API. Each deployment serves /api/* via a
+// rewrite to https://www.auxbrain.com (see each site's _redirects), and the dev
+// servers proxy it via vite.config server.proxy. This keeps the fork
+// self-contained with no cross-origin CORS dependency.
+const API_ROOT = '/api';
 
 const CONFIG_GIST_URL =
   'https://gist.githubusercontent.com/carpetsage/373992bc6c5e00f8abd39dfb752845c0/raw/config.json';

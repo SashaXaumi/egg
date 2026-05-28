@@ -13,6 +13,13 @@ export default defineConfig({
   },
   server: {
     host: true,
+    proxy: {
+      '/api': {
+        target: 'https://www.auxbrain.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
     forwardConsole: {
       unhandledErrors: true,
       logLevels: ['warn', 'error'],
