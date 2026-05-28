@@ -1,345 +1,257 @@
 <!-- eslint-disable vue/first-attribute-linebreak -->
 <template>
-  <div class="my-4 bg-white dark:bg-gray-800 shadow overflow-hidden ultrawide:rounded-lg">
-    <div class="px-4 py-4 sm:px-6" :class="completionStatusBgColorClass(leagueStatus.completionStatus)">
-      <div class="relative -ml-4 -mt-2 sm:flex items-start justify-between">
-        <div class="flex-grow ml-4 mt-2">
-          <h2 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100">
-            <base-icon
-              v-tippy="{ content: eggTooltip(egg, contract.customEggId) }"
-              :icon-rel-path="eggIconPath(egg, contract.customEggId)"
-              :size="64"
-              class="inline-block align-middle relative -top-px -left-1 h-6 w-6"
-            />
-            <base-click-to-copy :text="status.contractId" class="text-gray-900 dark:text-gray-100 mr-0.5">
-              {{ contract.name }}
-              <template #tooltip> Copy contract ID &lsquo;{{ status.contractId }}&rsquo; to clipboard </template>
-            </base-click-to-copy>
-            <template v-if="grade">
-              <contract-grade-label :grade="grade" class="inline-block relative h-8 mr-1" />
-            </template>
-            <template v-else-if="league !== null">
-              <contract-league-label :league="league" class="relative -top-px mr-1" />
-            </template>
-            <span
-              v-if="contract.maxCoopSize && !leagueStatus.hasEnded"
-              class="px-2.5 py-0.5 rounded-full text-xs font-medium text-white whitespace-nowrap relative -top-px"
-              :class="openings > 0 ? 'bg-green-600' : 'bg-gray-400 dark:bg-gray-500'"
-            >
-              <template v-if="openings > 0">{{ openings }} open</template>
-              <template v-else>Full</template>
-            </span>
-          </h2>
-          <div class="flex items-center">
-            <span class="flex items-center justify-center relative h-6 w-6 -left-1">
-              <svg viewBox="0 0 640 512" class="h-3.5 text-gray-400 dark:text-gray-300">
-                <path
-                  fill="currentColor"
-                  d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"
-                />
-              </svg>
-            </span>
-            <base-click-to-copy
-              :text="status.coopCode"
-              class="pl-px text-sm text-gray-700 dark:text-gray-300 truncate"
-              :style="{ maxWidth: 'min(20rem, 50vw)' }"
-            />
-            <template v-if="contract.minutesPerToken">
-              <base-icon icon-rel-path="egginc/b_icon_token.png" :size="64" class="block h-5 w-5 ml-1.5" />
-              <span class="pl-px text-sm text-gray-700 dark:text-gray-300 truncate">
-                {{ contract.minutesPerToken }}m
-              </span>
-            </template>
-            <!-- public/private -->
-            <svg
-              v-tippy="{ content: status.isPublic ? 'Public coop' : 'Private coop' }"
-              class="h-4 w-4 text-gray-400 dark:text-gray-300 ml-1.5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <template v-if="status.isPublic">
-                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                <path
-                  fill-rule="evenodd"
-                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                  clip-rule="evenodd"
-                />
-              </template>
-              <template v-else>
-                <path
-                  fill-rule="evenodd"
-                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
-                  clip-rule="evenodd"
-                />
-                <path
-                  d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"
-                />
-              </template>
-            </svg>
-            <!-- share button -->
-            <coop-card-share-sheet
-              class="ml-1.5"
-              :contract-id="status.contractId"
-              :coop-code="status.coopCode"
-              :end-time="leagueStatus.expectedFinalCompletionDateOfflineAdjusted.unix()"
-            />
-          </div>
+  <!--
+    Redesign: Variant C ("Combo") from the claude.ai/design "Ferret coop" handoff.
+    Hero contract card (from A) + compact "Business" rows (from B), scoped under .ferret.
+    The previous markup lives in git history; all <script> logic below is preserved
+    (unused computeds are kept intentionally so features can be re-enabled later).
+  -->
+  <div class="ferret my-4 overflow-hidden shadow ultrawide:rounded-lg">
+    <!-- ─── Hero contract ─── -->
+    <div style="padding: 14px 18px 0">
+      <div class="hero">
+        <base-icon
+          v-tippy="{ content: eggTooltip(egg, contract.customEggId) }"
+          :icon-rel-path="eggIconPath(egg, contract.customEggId)"
+          :size="128"
+          class="hero-egg"
+        />
+
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+          <span v-if="!leagueStatus.hasEnded" class="chip chip-live">Live</span>
+          <template v-if="grade">
+            <contract-grade-label :grade="grade" class="inline-block relative h-7" />
+          </template>
+          <template v-else-if="league !== null">
+            <contract-league-label :league="league" />
+          </template>
+          <span
+            v-if="contract.maxCoopSize && !leagueStatus.hasEnded"
+            class="chip"
+            :style="{
+              color: openings > 0 ? 'var(--leaf)' : 'var(--text-2)',
+              borderColor: openings > 0 ? 'rgba(74,222,128,0.28)' : 'var(--line)',
+            }"
+          >
+            <template v-if="openings > 0">{{ openings }} open</template>
+            <template v-else>Full</template>
+          </span>
         </div>
 
-        <contract-status-label :status="leagueStatus.completionStatus" />
+        <h1 class="display hero-title">
+          <base-click-to-copy :text="status.contractId" style="color: var(--text-0)">
+            {{ contract.name }}
+            <template #tooltip> Copy contract ID &lsquo;{{ status.contractId }}&rsquo; to clipboard </template>
+          </base-click-to-copy>
+        </h1>
 
-        <div class="absolute right-0 bottom-0 sm:bottom-1">
-          <auto-refreshed-relative-time :reference-time="status.refreshTime">
-            <template #default="{ relativeTime, referenceTimeFormatted, triggerRefresh }">
-              <span class="flex items-center space-x-0.5" :style="{ maxWidth: '50vw' }">
-                <span
-                  v-tippy="{
-                    content: `Last refreshed ${referenceTimeFormatted}`,
-                  }"
-                  class="text-xs text-gray-500 dark:text-gray-400 cursor-help truncate"
-                >
-                  Refreshed {{ relativeTime }}
-                </span>
-                <svg
-                  v-tippy="{ content: 'Refresh' }"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  class="h-3.5 w-3.5 text-gray-500 dark:text-gray-400 focus:outline-none cursor-pointer select-none"
-                  @click="triggerRefresh"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-              </span>
+        <!-- Expected check-in time (most important number) -->
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; max-width: 80%">
+          <tippy class="expected-pill">
+            <span style="color: var(--gold); display: inline-flex; align-self: center">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" />
+              </svg>
+            </span>
+            <span
+              style="
+                font-size: 10px;
+                color: var(--text-2);
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+              "
+            >
+              expected
+            </span>
+            <span class="mono display" style="font-size: 14px; color: var(--gold)">{{ expectedClock }}</span>
+            <template #content>
+              <p>
+                Expected to complete at
+                {{ leagueStatus.expectedFinalCompletionDateOfflineAdjusted.format('YYYY-MM-DD HH:mm') }}. Assumes that
+                all players will check-in right before completion.
+              </p>
             </template>
-          </auto-refreshed-relative-time>
+          </tippy>
+          <span style="font-size: 11px; color: var(--text-2); font-weight: 600; white-space: nowrap">
+            in
+            <span class="mono" style="color: var(--text-1); font-weight: 700">{{
+              formatDuration(leagueStatus.expectedTimeToCompleteOfflineAdjusted)
+            }}</span>
+          </span>
+        </div>
+
+        <!-- Progress -->
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; align-items: baseline; gap: 8px">
+          <div style="display: flex; gap: 6px; align-items: baseline; white-space: nowrap">
+            <span class="display" style="font-size: 18px; color: var(--leaf)">{{ teamProgressPct }}%</span>
+            <span style="font-size: 11px; color: var(--text-2); font-weight: 700">business</span>
+          </div>
+          <span
+            style="
+              font-size: 10px;
+              color: var(--text-3);
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 0.06em;
+              white-space: nowrap;
+            "
+          >
+            Ends in
+            <span class="mono" style="color: var(--text-1)">{{ formatDuration(max(status.secondsRemaining, 0)) }}</span>
+          </span>
+        </div>
+        <div class="bar" style="height: 12px">
+          <div v-if="barProjected > barConfirmed" class="strip" :style="{ width: barProjected + '%' }" />
+          <div v-if="barEstimated > barConfirmed" class="fill" :style="{ width: barEstimated + '%', opacity: 0.55 }" />
+          <div class="fill" :style="{ width: barConfirmed + '%' }" />
+        </div>
+
+        <!-- Two stat pills -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px">
+          <div class="stat-tile">
+            <div class="k">Eggs shipped</div>
+            <div
+              class="display"
+              style="font-size: 17px; color: var(--gold); display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap"
+            >
+              <span>{{ formatEIValue(status.eggsLaid) }}</span>
+              <span style="font-size: 11px; color: var(--text-2); font-weight: 600"
+                >/ {{ formatEIValue(leagueStatus.finalTarget, { trim: true }) }}</span
+              >
+            </div>
+          </div>
+          <div class="stat-tile">
+            <div class="k">Production rate</div>
+            <div
+              class="display"
+              style="font-size: 17px; color: var(--leaf); display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap"
+            >
+              <span>{{ formatEIValue(status.eggsPerHour) }}</span>
+              <span v-if="leagueStatus.requiredEggsPerHour !== null" style="font-size: 11px; color: var(--text-2); font-weight: 600"
+                >/ {{ formatEIValue(leagueStatus.requiredEggsPerHour) }} req</span
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="border-t border-gray-200 dark:border-gray-700 px-4 py-4 sm:px-6 space-y-4">
-      <dl class="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <div v-if="!contract.gradeSpecs" class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Created by</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            <template v-if="status.creator">
-              <template v-if="devmode">
-                <base-click-to-copy :text="status.creator.id" class="block text-gray-900 dark:text-gray-100 truncate">
-                  {{ status.creator.name }}
-                  <template #tooltip>Click to copy ID: {{ status.creator.id }}</template>
-                </base-click-to-copy>
-              </template>
-              <template v-else>
-                {{ status.creator.name }}
-              </template>
-            </template>
-            <template v-else-if="status.creatorName">
-              <template v-if="devmode">
-                <base-click-to-copy :text="status.creatorId" class="block text-gray-900 dark:text-gray-100 truncate">
-                  {{ status.creatorName }}
-                  <template #tooltip>Click to copy ID: {{ status.creatorId }}</template>
-                </base-click-to-copy>
-              </template>
-              <template v-else>
-                {{ status.creatorName }}
-              </template>
-            </template>
-            <template v-else>
-              <span
-                v-tippy="{
-                  content: status.cannotDetermineCreator
-                    ? 'Due to changes to the Egg, Inc. API, it is no longer possible to determine the creator.'
-                    : 'The creator has left.',
-                }"
-                class="cursor-help"
-                >&ndash;</span
-              >
-            </template>
-          </dd>
-        </div>
-        <div v-else class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Modifiers</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            {{ modifiers.join(', ') }}
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Players</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            {{ status.contributors.length }} / {{ contract.maxCoopSize }}
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Eggs shipped</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            <span class="text-green-500">{{ formatEIValue(status.eggsLaid) }}</span> /
-            {{ formatEIValue(leagueStatus.finalTarget, { trim: true }) }}
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Hourly production rate</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">{{
-              formatEIValue(status.eggsPerHour)
-            }}</span>
-            <template v-if="leagueStatus.requiredEggsPerHour !== null">
-              current / {{ formatEIValue(leagueStatus.requiredEggsPerHour) }} required
-            </template>
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Time to complete, offline adjusted</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            <tippy class="text-gray-900 dark:text-gray-100">
-              <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">{{
-                formatDuration(leagueStatus.expectedTimeToCompleteOfflineAdjusted)
-              }}</span>
-              expected
-              <template v-if="leagueStatus.expectedTimeToCompleteOfflineAdjusted > 0" #content>
-                <p>
-                  Expected to complete at
-                  <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">
-                    {{ leagueStatus.expectedFinalCompletionDateOfflineAdjusted.format('YYYY-MM-DD HH:mm') }} </span
-                  >.
-                </p>
-                <template v-if="grade">
-                  <p>
-                    Predicted total time taken for contract completion, offline adjusted:
-                    <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">
-                      {{ formatDuration(offlineDuration) }}
-                    </span>
-                  </p>
-                </template>
-                <br />
-                <p>Assumes that all players will check-in right before completion.</p>
-              </template>
-            </tippy>
-            /
-            <tippy class="text-gray-900 dark:text-gray-100">
-              {{ formatDuration(max(status.secondsRemaining, 0)) }} remaining
-              <template #content>
-                {{ status.secondsRemaining > 0 ? 'Expires' : 'Expired' }} at
-                {{ status.expirationTime.format('YYYY-MM-DD HH:mm') }}
-              </template>
-            </tippy>
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 flex flex-row dark:text-gray-400">
-            <template
-              v-if="leagueStatus.hasEnded && expectedTimeToCompleteRecentOfflineAdjusted <= 0 && completionTime > 0"
+    <!-- ─── Meta row (coop code · tokens · visibility · share · refresh) ─── -->
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 10px 22px 0;
+        color: var(--text-2);
+        font-size: 12px;
+      "
+    >
+      <base-click-to-copy :text="status.coopCode" class="mono" style="color: var(--text-1); max-width: 50vw" />
+      <template v-if="contract.minutesPerToken">
+        <span style="display: inline-flex; align-items: center; gap: 3px">
+          <base-icon icon-rel-path="egginc/b_icon_token.png" :size="64" class="block h-4 w-4" />
+          {{ contract.minutesPerToken }}m
+        </span>
+      </template>
+      <svg
+        v-tippy="{ content: status.isPublic ? 'Public coop' : 'Private coop' }"
+        class="h-4 w-4"
+        style="color: var(--text-2)"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <template v-if="status.isPublic">
+          <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+          <path
+            fill-rule="evenodd"
+            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+            clip-rule="evenodd"
+          />
+        </template>
+        <template v-else>
+          <path
+            fill-rule="evenodd"
+            d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+            clip-rule="evenodd"
+          />
+          <path
+            d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z"
+          />
+        </template>
+      </svg>
+      <coop-card-share-sheet
+        :contract-id="status.contractId"
+        :coop-code="status.coopCode"
+        :end-time="leagueStatus.expectedFinalCompletionDateOfflineAdjusted.unix()"
+      />
+      <span style="flex: 1" />
+      <auto-refreshed-relative-time :reference-time="status.refreshTime">
+        <template #default="{ relativeTime, referenceTimeFormatted, triggerRefresh }">
+          <span class="flex items-center space-x-1" style="color: var(--text-2)">
+            <span v-tippy="{ content: `Last refreshed ${referenceTimeFormatted}` }" class="cursor-help truncate">
+              Refreshed {{ relativeTime }}
+            </span>
+            <svg
+              v-tippy="{ content: 'Refresh' }"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              class="h-3.5 w-3.5 cursor-pointer select-none"
+              @click="triggerRefresh"
             >
-              Total time taken for contract completion
-            </template>
-            <template v-else>
-              Time to complete,
-              <span class="relative inline-block mx-0.5 cursor-pointer">
-                <span class="underline decoration-dotted font-medium"> recent ({{ recentWindowLabel }}) </span>
-                <select
-                  v-model="recentWindowSeconds"
-                  class="absolute inset-0 opacity-0 cursor-pointer w-full"
-                  @change="onRecentWindowChange"
-                >
-                  <option v-for="opt in recentWindowOptions" :key="opt.seconds" :value="opt.seconds">
-                    {{ opt.label }}
-                  </option>
-                </select>
-              </span>
-              checkins only
-              <base-warning
-                v-if="anyPlayerPrivate && expectedTimeToCompleteRecentOfflineAdjusted > 0"
-                v-tippy="'This is a conservative estimate due to some players having private farms'"
-                class="mx-0.5 translate-y-0.5"
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
               />
-            </template>
-          </dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            <tippy class="text-gray-900 dark:text-gray-100">
-              <span
-                v-if="leagueStatus.hasEnded && expectedTimeToCompleteRecentOfflineAdjusted <= 0 && completionTime > 0"
-                :class="completionStatusFgColorClass(leagueStatus.completionStatus)"
-              >
-                {{ formatDuration(completionTime) }}
-              </span>
-              <template v-else>
-                <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)"
-                  >{{ formatDuration(expectedTimeToCompleteRecentOfflineAdjusted) }}
-                </span>
-                expected
-              </template>
-              <template v-if="expectedTimeToCompleteRecentOfflineAdjusted > 0" #content>
-                <p>
-                  The expected completion time taking into account offline eggs from members who checked in within the
-                  last {{ recentWindowLabel }} is
-                  <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">
-                    {{ expectedFinalCompletionDateRecentOfflineAdjusted.format('YYYY-MM-DD HH:mm') }} </span
-                  >.
-                </p>
-                <template v-if="grade">
-                  <p>
-                    Predicted total time taken for contract completion, recent checkins:
-                    <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">
-                      {{ formatDuration(recentDuration) }}
-                    </span>
-                  </p>
-                </template>
-                <br />
-                <p>
-                  {{ recentContributors.length }} / {{ status.contributors.length }} players checked in within the last
-                  {{ recentWindowLabel }}, contributing
-                  <span :class="completionStatusFgColorClass(leagueStatus.completionStatus)">
-                    {{ formatEIValue(recentEggsPerHour) }}/hr</span
-                  >
-                  ({{ ((recentEggsPerHour / status.eggsPerHour) * 100).toFixed(0) }}% of total rate).
-                </p>
-              </template>
-              <template v-else-if="!leagueStatus.hasEnded && expectedTimeToCompleteRecentOfflineAdjusted <= 0" #content>
-                <p>The coop should complete after enough members check-in.</p>
-              </template>
-            </tippy>
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Total earnings boost</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            {{ (status.totalEarningsBoost * 100).toFixed(0) }}%
-          </dd>
-        </div>
-        <div class="sm:col-span-1">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Total egg laying rate boost</dt>
-          <dd class="mt-1 text-sm text-gray-900 dark:text-gray-100">
-            {{ (status.totalEggLayingRateBoost * 100).toFixed(0) }}%
-          </dd>
-        </div>
-      </dl>
+            </svg>
+          </span>
+        </template>
+      </auto-refreshed-relative-time>
+    </div>
 
-      <contract-progress-bar
-        :eggs-laid="status.eggsLaid"
-        :eggs-laid-offline-adjusted="status.eggsLaidOfflineAdjusted"
-        :projected-eggs-laid="status.projectedEggsLaid"
-        :league-status="leagueStatus"
+    <!-- ─── Business list ─── -->
+    <div style="padding: 16px 18px 4px">
+      <div class="section-h">
+        <h2>Business <small>{{ status.contributors.length }}/{{ contract.maxCoopSize }}</small></h2>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-2);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+          "
+        >
+          Shipped
+        </div>
+      </div>
+      <coop-card-contribution-table
+        :egg="egg"
+        :coop-status="status"
+        :target="leagueStatus.finalTarget"
+        :custom-egg-id="contract.customEggId"
       />
     </div>
 
-    <div class="flex flex-col">
-      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div class="shadow overflow-hidden border-b border-gray-200 dark:border-gray-700">
-            <coop-card-contribution-table
-              :egg="egg"
-              :coop-status="status"
-              :target="leagueStatus.finalTarget"
-              :custom-egg-id="contract.customEggId"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="footer-note"><span class="paw">⌒</span> burrowed by ferrets</div>
   </div>
 </template>
 
@@ -443,6 +355,18 @@ export default defineComponent({
       return 0;
     });
 
+    // ── Hero-specific derived values (Variant C) ──
+    const pct = (n: number) => Math.max(0, Math.min(Math.round((n / leagueStatus.value.finalTarget) * 100), 100));
+    const teamProgressPct = computed(() => pct(status.value.eggsLaid));
+    const barConfirmed = computed(() => pct(status.value.eggsLaid));
+    const barEstimated = computed(() => pct(status.value.eggsLaidOfflineAdjusted));
+    const barProjected = computed(() => pct(status.value.projectedEggsLaid));
+    const expectedClock = computed(() =>
+      leagueStatus.value.expectedTimeToCompleteOfflineAdjusted > 0
+        ? leagueStatus.value.expectedFinalCompletionDateOfflineAdjusted.format('h:mm A')
+        : '—'
+    );
+
     function applyRecentWindow() {
       setLocalStorageNoPrefix(RECENT_WINDOW_KEY, String(recentWindowSeconds.value));
     }
@@ -513,6 +437,12 @@ export default defineComponent({
       max: Math.max,
       grades,
       completionTime,
+      // Hero (Variant C)
+      teamProgressPct,
+      barConfirmed,
+      barEstimated,
+      barProjected,
+      expectedClock,
       recentWindowSeconds,
       recentWindowLabel,
       recentWindowOptions: RECENT_WINDOW_OPTIONS,

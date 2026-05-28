@@ -1,0 +1,348 @@
+/* ─────────────────────────────────────────────────────────────
+   Ferret Business Tracker — playful gamey dark theme
+   Scoped under .ferret so it does not affect the rest of the app
+   or the existing light/dark theme switcher.
+   Adapted from the claude.ai/design "Ferret coop" handoff (Variant C).
+   ───────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+.ferret {
+  /* Warm dark base — like a cozy ferret burrow */
+  --bg-0: #16110d; /* page */
+  --bg-1: #1f1812; /* surface */
+  --bg-2: #2a2118; /* raised card */
+  --bg-3: #382b1f; /* hover/active */
+  --line: #3a2e22;
+  --line-soft: #2c2218;
+
+  /* Warm cream text */
+  --text-0: #fbf3df;
+  --text-1: #d8c9a8;
+  --text-2: #998a6e;
+  --text-3: #6b5e48;
+
+  /* Accents */
+  --gold: #fbbf24;
+  --gold-soft: #fde68a;
+  --amber: #f59e0b;
+  --cinnamon: #d97757;
+  --plum: #c084fc;
+  --rose: #f472b6;
+  --ice: #67e8f9;
+  --leaf: #4ade80;
+  --leaf-strip: rgba(74, 222, 128, 0.35);
+  --danger: #f87171;
+
+  /* Radii */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+
+  /* Type */
+  --f-display: 'Fredoka', system-ui, sans-serif;
+  --f-body: 'Nunito', system-ui, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  font-family: var(--f-body);
+  color: var(--text-0);
+  background: var(--bg-0);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.005em;
+}
+
+.ferret * {
+  box-sizing: border-box;
+}
+
+.ferret .display {
+  font-family: var(--f-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.ferret .mono {
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───── Chips / pills ───── */
+.ferret .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg-2);
+  color: var(--text-1);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.ferret .chip-grade {
+  background: linear-gradient(135deg, #b45309, #fbbf24);
+  color: #1a1208;
+  border: none;
+  padding: 3px 9px;
+  font-family: var(--f-display);
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.ferret .chip-you {
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  color: #1a1208;
+  border: none;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.ferret .chip-live {
+  background: rgba(74, 222, 128, 0.14);
+  color: var(--leaf);
+  border: 1px solid rgba(74, 222, 128, 0.28);
+}
+.ferret .chip-live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--leaf);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.22);
+  animation: ferretPulseDot 1.6s infinite;
+}
+@keyframes ferretPulseDot {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.ferret .role {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: var(--f-display);
+  font-size: 11px;
+  font-weight: 600;
+}
+.ferret .role::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ───── Section headers ───── */
+.ferret .section-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px 10px;
+}
+.ferret .section-h h2 {
+  font-family: var(--f-display);
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-0);
+  letter-spacing: -0.01em;
+}
+.ferret .section-h h2 small {
+  color: var(--text-2);
+  font-weight: 600;
+  margin-left: 6px;
+  font-size: 12px;
+}
+
+/* ───── Progress bar ───── */
+.ferret .bar {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-3);
+  overflow: hidden;
+}
+.ferret .bar .fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--leaf), #a3e635);
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.4) inset;
+}
+.ferret .bar .strip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-image: repeating-linear-gradient(45deg, var(--leaf-strip) 0 6px, transparent 6px 12px);
+}
+
+/* ───── Hero contract ───── */
+.ferret .hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(150% 100% at 100% 0%, rgba(192, 132, 252, 0.16), transparent 55%),
+    radial-gradient(150% 100% at 0% 100%, rgba(217, 119, 87, 0.12), transparent 55%), var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 16px;
+}
+.ferret .hero-egg {
+  position: absolute;
+  right: 8px;
+  top: 12px;
+  width: 78px;
+  height: 78px;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+  opacity: 0.95;
+  pointer-events: none;
+}
+.ferret .hero-title {
+  font-size: 22px;
+  margin: 12px 0 4px;
+  max-width: 74%;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-0);
+}
+.ferret .expected-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(251, 191, 36, 0.32);
+  white-space: nowrap;
+}
+.ferret .stat-tile {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+.ferret .stat-tile .k {
+  font-size: 10px;
+  color: var(--text-2);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+/* ───── Artifact slots ───── */
+.ferret .arts {
+  display: flex;
+  gap: 6px;
+}
+.ferret .art {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.06), transparent 50%), var(--bg-3);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.ferret .art img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ───── Business (player) rows ───── */
+.ferret .squad-card {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+.ferret .squad-card.you {
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.07), var(--bg-1));
+  border-color: rgba(251, 191, 36, 0.32);
+  box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.12), 0 14px 28px -20px rgba(251, 191, 36, 0.4);
+}
+.ferret .rank {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 11px;
+  background: var(--bg-3);
+  color: var(--text-1);
+  flex-shrink: 0;
+}
+.ferret .rank-1 {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  color: #1a1208;
+}
+.ferret .rank-2 {
+  background: linear-gradient(135deg, #d4d4d8, #71717a);
+  color: #1a1208;
+}
+.ferret .rank-3 {
+  background: linear-gradient(135deg, #cd7f32, #8b4513);
+  color: #1a1208;
+}
+.ferret .squad-card .name {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-0);
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+.ferret .offline-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px 2px 4px;
+  border-radius: 999px;
+  background: rgba(192, 132, 252, 0.1);
+  border: 1px solid rgba(192, 132, 252, 0.2);
+  flex-shrink: 0;
+}
+
+/* ───── Personal stats (compact bottom block) — used in a later pass ───── */
+.ferret .den {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 14px;
+}
+.ferret .den-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* ───── Footer ───── */
+.ferret .footer-note {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-3);
+  padding: 10px 0 4px;
+  font-family: var(--f-body);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ferret .footer-note .paw {
+  color: var(--cinnamon);
+}

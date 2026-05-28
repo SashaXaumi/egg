@@ -4,6 +4,7 @@ import useThemeStore from './stores/theme';
 import router from './router';
 import App from './App.vue';
 import './index.css';
+import './ferret.css';
 
 import PrimeVue from 'primevue/config';
 // import 'primeicons/primeicons.css';
