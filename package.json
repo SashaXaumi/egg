@@ -23,25 +23,8 @@
     "lib",
     "eicoop",
     "wasmegg/_home",
-    "wasmegg/artifact-explorer",
-    "wasmegg/artifact-sandbox",
-    "wasmegg/consumption-sheet",
-    "wasmegg/enlightenment",
-    "wasmegg/events",
-    "wasmegg/inventory-visualizer",
-    "wasmegg/loot-simulator",
-    "wasmegg/mission-list",
-    "wasmegg/past-contracts",
-    "wasmegg/proto-explorer",
-    "wasmegg/researches",
     "wasmegg/rockets-tracker",
-    "wasmegg/smart-assistant",
-    "wasmegg/shell-company",
-    "wasmegg/eggs-laid",
-    "wasmegg/legendary-study",
-    "wasmegg/mission-planner",
-    "wasmegg/virtue-companion",
-    "wasmegg/ascension-planner"
+    "wasmegg/virtue-companion"
   ],
   "packageManager": "pnpm@11.1.1"
 }

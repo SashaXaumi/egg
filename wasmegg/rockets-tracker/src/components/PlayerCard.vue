@@ -205,42 +205,22 @@
 
             <dt class="text-right text-sm font-medium whitespace-nowrap">Contracts</dt>
             <dd class="flex items-center text-left text-sm text-gray-900">
-              <a
-                :href="`https://wasmegg-carpet.netlify.app/past-contracts/?playerId=${userId}`"
-                target="_blank"
-                class="flex items-center"
-              >
+              <span class="flex items-center">
                 <img :src="iconURL('egginc/egg_of_prophecy.png', 64)" class="h-4 w-4 -ml-0.5" />
-                <span class="text-yellow-500 underline">
+                <span class="text-yellow-500">
                   {{ prophecyEggsProgress.fromContracts.completed }}
                 </span>
-                <svg class="h-3.5 w-3.5 text-gray-500 hover:text-gray-600 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
-                  />
-                  <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                </svg>
-              </a>
+              </span>
             </dd>
 
             <dt class="text-right text-sm font-medium whitespace-nowrap">Seasons</dt>
             <dd class="flex items-center text-left text-sm text-gray-900">
-              <a
-                :href="`https://wasmegg-carpet.netlify.app/past-contracts/?playerId=${userId}`"
-                target="_blank"
-                class="flex items-center"
-              >
+              <span class="flex items-center">
                 <img :src="iconURL('egginc/egg_of_prophecy.png', 64)" class="h-4 w-4 -ml-0.5" />
-                <span class="text-yellow-500 underline">
+                <span class="text-yellow-500">
                   {{ prophecyEggsProgress.fromContractSeasons.completed }}
                 </span>
-                <svg class="h-3.5 w-3.5 text-gray-500 hover:text-gray-600 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
-                  />
-                  <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                </svg>
-              </a>
+              </span>
             </dd>
           </div>
         </div>
@@ -416,21 +396,6 @@
         <div v-if="!collapsed" class="py-2">
           <div class="text-sm font-medium">Inventory items</div>
 
-          <a
-            :href="`https://wasmegg-carpet.netlify.app/inventory-visualizer/?playerId=${userId}`"
-            target="_blank"
-            class="flex items-center justify-center space-x-0.5 text-xs"
-            :class="true ? 'text-green-500 hover:text-green-600' : 'text-gray-500 hover:text-gray-600'"
-          >
-            <span class="underline">Visualize and share your inventory</span>
-            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
-              />
-              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-            </svg>
-          </a>
-
           <!-- Standard Inventory -->
           <div class="text-xs font-medium text-gray-600 mt-2">Standard</div>
           <dl class="grid gap-x-4 justify-center mt-1" :style="{ gridTemplateColumns: 'repeat(4, min-content)' }">
@@ -559,13 +524,7 @@
             >
               {{ zlcExthenRecord - completedExtendedHenerpriseCount }} short of the current record&nbsp;
               <img :src="medalZLCRecord" class="inline h-4 w-4 mr-0.5" />
-              <a
-                href="https://wasmegg-carpet.netlify.app/legendary-study"
-                target="_blank"
-                class="hover:text-yellow-900"
-              >
-                {{ zlcExthenRecord }}
-              </a>
+              <span>{{ zlcExthenRecord }}</span>
             </div>
           </template>
           <div v-else-if="zeroLegendaryUnconditionallyUnworthyNickname" class="mt-2 text-xs text-gray-500">
@@ -578,19 +537,6 @@
             You aren't poop-worthy.<br />
             Keep <s>defecating</s> launching.
           </div>
-          <a
-            href="https://wasmegg-carpet.netlify.app/legendary-study"
-            target="_blank"
-            class="flex items-center justify-center space-x-0.5 text-xs text-gray-500 hover:text-gray-600 mt-1"
-          >
-            <span class="underline">How you fare against other players</span>
-            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
-              />
-              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-            </svg>
-          </a>
         </div>
 
         <div v-if="!collapsed" class="py-2">
@@ -730,19 +676,6 @@
             </div>
           </div>
 
-          <a
-            :href="`https://wasmegg-carpet.netlify.app/shell-company/?playerId=${userId}`"
-            target="_blank"
-            class="flex items-center justify-center space-x-0.5 text-xs text-gray-500 hover:text-gray-600 mt-1"
-          >
-            <span class="underline">Your shells and available shells</span>
-            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-              <path
-                d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
-              />
-              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-            </svg>
-          </a>
         </div>
 
         <div v-if="!collapsed" class="py-2">

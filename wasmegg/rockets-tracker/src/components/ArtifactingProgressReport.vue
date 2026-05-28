@@ -1,17 +1,5 @@
 <template>
   <div class="mx-4 xl:mx-0">
-    <div
-      class="w-max max-w-full px-3 py-2 text-center text-xs text-green-800 bg-green-50 rounded-md shadow-sm mx-auto -mt-2 mb-2"
-    >
-      Visualize and share your inventory with
-      <a
-        :href="`/inventory-visualizer/?playerId=${playerId}`"
-        target="_blank"
-        class="text-green-700 hover:text-green-900 underline"
-        >Inventory visualizer</a
-      >.
-    </div>
-
     <div class="flex justify-center mb-2 space-x-4">
       <div class="relative flex items-start">
         <div class="flex items-left h-5">
@@ -101,11 +89,7 @@
     </div>
 
     <ul class="list-disc list-inside text-xs leading-tight space-y-1">
-      <li>
-        Hovering on the icon or name of an item reveals its crafting recipe; clicking on it takes you to the relevant
-        page on
-        <a href="/artifact-explorer/" target="_blank" class="text-blue-500 hover:text-blue-600">Artifact explorer</a>.
-      </li>
+      <li>Hovering on the icon or name of an item reveals its crafting recipe.</li>
       <li>
         Items with a green dot in the corner can be crafted from your current possessions. How many is shown to the
         right. Intermediate crafting and demoting are both allowed here. For instance, if you have 4 common, 1 rare and

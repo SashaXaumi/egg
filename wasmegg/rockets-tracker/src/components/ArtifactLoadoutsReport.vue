@@ -22,21 +22,6 @@
         </div>
         <artifact-gallery v-if="farm.artifactSet.artifacts.length > 0" :artifact-set="farm.artifactSet" />
         <div v-else class="text-center text-sm text-gray-700">No artifact equipped on this farm.</div>
-        <div
-          v-if="farm.isHomeFarm"
-          class="w-max max-w-full px-3 py-2 text-center text-xs text-green-800 bg-green-50 rounded-md shadow-sm mx-auto mt-1"
-        >
-          You can get recommendations for optimal prestige loadouts from
-          <a href="/smart-assistant/" target="_blank" class="text-green-700 hover:text-green-900 underline"
-            >Smart assistant</a
-          >.<template v-if="farm.isEnlightenmentFarm"
-            ><br />
-            If you're aiming for an enlightenment trophy, check
-            <a href="/enlightenment/" target="_blank" class="text-green-700 hover:text-green-900 underline"
-              >Enlightenment companion</a
-            >.</template
-          >
-        </div>
       </div>
     </div>
   </div>

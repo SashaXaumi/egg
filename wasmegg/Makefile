@@ -1,6 +1,6 @@
 MAKEFLAGS ?= -j9
 
-targets = _home virtue-companion ascension-planner artifact-explorer artifact-sandbox consumption-sheet enlightenment events inventory-visualizer mission-list past-contracts proto-explorer researches rockets-tracker shell-company smart-assistant eggs-laid legendary-study mission-planner 
+targets = _home virtue-companion rockets-tracker
 init-targets = $(addprefix init-,$(targets))
 fastbuild-targets = $(addprefix fastbuild-,$(targets))
 clean-targets = $(addprefix clean-,$(targets))
@@ -14,9 +14,6 @@ init: $(init-targets)
 
 fastbuild: $(fastbuild-targets)
 	netlify-headers-expander dist
-
-update-loot-data:
-	./artifact-explorer/update-loot-data.sh
 
 clean: $(clean-targets)
 

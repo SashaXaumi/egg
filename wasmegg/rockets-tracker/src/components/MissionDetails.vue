@@ -57,9 +57,7 @@
       <div class="sm:max-w-lg flex flex-wrap justify-center mx-auto">
         <div v-for="item in items" :key="item.key" class="border-box h-10 w-10 p-1">
           <tippy
-            tag="a"
-            :href="`/artifact-explorer/#/artifact/${item.tierProps.id}/`"
-            target="_blank"
+            tag="div"
             class="relative block h-full w-full rounded-full"
             :class="artifactRarityBgClass(item.afxRarity) || 'bg-gray-200'"
           >
@@ -97,9 +95,6 @@
     </template>
     <div class="mt-2 text-xs text-gray-500 text-center">
       Hover mouse over an item to show details.<br />
-      Click to open the relevant
-      <a href="/artifact-explorer/" target="_blank" class="underline">artifact explorer</a>
-      page.<br />
       Click / double click on mobile.
     </div>
   </div>

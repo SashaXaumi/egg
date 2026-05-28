@@ -37,66 +37,9 @@
   </ul>
 
   <h2>Tools hosted at this domain</h2>
-  <h3>Interactive apps</h3>
   <ul>
-    <li><tool-description id="artifact-explorer" @visit="onvisit" /></li>
-    <li><tool-description id="artifact-sandbox" @visit="onvisit" /></li>
     <li><tool-description id="rockets-tracker" @visit="onvisit" /></li>
     <li><tool-description id="virtue-companion" @visit="onvisit" /></li>
-    <li><tool-description id="ascension-planner" @visit="onvisit" /></li>
-    <li><tool-description id="past-contracts" @visit="onvisit" /></li>
-    <li><tool-description id="inventory-visualizer" @visit="onvisit" /></li>
-    <li><tool-description id="enlightenment" @visit="onvisit" /></li>
-    <li><tool-description id="smart-assistant" @visit="onvisit" /></li>
-    <li><tool-description id="shell-company" @visit="onvisit" /></li>
-    <li><tool-description id="eggs-laid" @visit="onvisit" /></li>
-    <li><tool-description id="mission-planner" @visit="onvisit" /></li>
-  </ul>
-
-  <h3>Data sheets</h3>
-  <ul>
-    <li><tool-description id="mission-list" @visit="onvisit" /></li>
-    <li><tool-description id="consumption-sheet" @visit="onvisit" /></li>
-    <li><tool-description id="events" @visit="onvisit" /></li>
-    <li><tool-description id="legendary-study" @visit="onvisit" /></li>
-  </ul>
-
-  <h3>Developer tools</h3>
-  <ul>
-    <li><tool-description id="researches" @visit="onvisit" /></li>
-  </ul>
-  <p>
-    Certain tools are not advertised here due to concerns. If you are interested, poke around the source repo to find
-    them.
-  </p>
-
-  <h2>Miscellaneous small tools</h2>
-  <p>
-    You can find more small tools at
-    <base-link href="https://eiadhoc.netlify.app/">eiadhoc.netlify.app</base-link>.
-  </p>
-
-  <h2>Desktop applications</h2>
-  <ul>
-    <li><tool-description id="EggLedger" @visit="onvisit" /></li>
-  </ul>
-
-  <!-- <h2>Guides</h2> -->
-
-  <h2>Advanced</h2>
-  <ul>
-    <li><tool-description id="ebeb" @visit="onvisit" /></li>
-    <li><tool-description id="fuckify" @visit="onvisit" /></li>
-    <li>
-      <span class="bg-green-100">
-        <base-link href="https://ei.tcl.sh/tips" :everfresh="true" @click="onrick"
-          >Advanced strategies for seasoned players</base-link
-        >
-        <sup class="text-xs font-medium uppercase text-green-600 ml-1">Secret</sup>
-      </span>
-      &mdash; Strategies so next-level, they will blow your effing mind. You're advised to stay away. Not for the
-      faint-hearted.
-    </li>
   </ul>
 
   <h2>Other Links</h2>

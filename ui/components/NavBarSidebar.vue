@@ -127,7 +127,6 @@ import {
   EmojiHappyIcon,
   HomeIcon,
   IdentificationIcon,
-  ViewGridIcon,
   XIcon,
 } from '@heroicons/vue/solid';
 
@@ -172,37 +171,8 @@ const entries: ({
 
   null,
 
-  idToTool.get('artifact-explorer')!,
-  idToTool.get('artifact-sandbox')!,
   idToTool.get('rockets-tracker')!,
   idToTool.get('virtue-companion')!,
-  idToTool.get('ascension-planner')!,
-  idToTool.get('past-contracts')!,
-  idToTool.get('inventory-visualizer')!,
-  idToTool.get('enlightenment')!,
-  idToTool.get('smart-assistant')!,
-  idToTool.get('shell-company')!,
-  idToTool.get('eggs-laid')!,
-  idToTool.get('mission-planner')!,
-
-  null,
-
-  idToTool.get('mission-list')!,
-  idToTool.get('consumption-sheet')!,
-  idToTool.get('events')!,
-
-  null,
-
-  {
-    id: 'misc',
-    title: 'Miscellaneous tools',
-    url: 'https://eiadhoc.netlify.app/',
-    icon: ViewGridIcon,
-  },
-
-  null,
-
-  idToTool.get('EggLedger')!,
 
   null,
 ];

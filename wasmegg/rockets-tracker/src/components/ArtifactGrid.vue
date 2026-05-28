@@ -36,7 +36,7 @@
                     :class="{ 'opacity-30': !tier.discovered }"
                   >
                     <div class="h-12 w-12 bg-gray-150 rounded-full">
-                      <a v-if="spoilers || tier.discovered" :href="artifactExplorerLink(tier)" target="_blank">
+                      <template v-if="spoilers || tier.discovered">
                         <tippy tag="img" class="h-12 w-12 p-1" :src="iconURL(tier.iconPath, 128)">
                           <template v-if="tier.props.recipe" #content>
                             <p>Crafting recipe:</p>
@@ -48,7 +48,7 @@
                             />
                           </template>
                         </tippy>
-                      </a>
+                      </template>
                       <template v-else>
                         <tippy tag="img" class="h-12 w-12 p-1 silhouette" :src="iconURL(tier.iconPath, 128)">
                           <template v-if="tier.props.recipe" #content>
@@ -319,7 +319,6 @@ export default defineComponent({
     const craftingLevel = computed(() => getCraftingLevelFromXp(craftingXp.value));
 
     return {
-      artifactExplorerLink,
       Rarity: ei.ArtifactSpec.Rarity,
       artifactRarityFgClass,
       artifactRarityFgClassBright,
@@ -335,10 +334,6 @@ export default defineComponent({
     };
   },
 });
-
-function artifactExplorerLink(item: InventoryItem) {
-  return `/artifact-explorer/#/artifact/${item.id}/`;
-}
 
 // To string with thousand separators.
 function ts(x: number): string {

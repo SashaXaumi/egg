@@ -39,15 +39,6 @@
       </div>
     </div>
 
-    <div class="mx-4 mb-1 xl:mx-0 text-xs">
-      Check the
-      <a href="/mission-list/" target="_blank" class="text-blue-500 hover:text-blue-600"
-        >full list of spaceships and mission parameters</a
-      >
-      for <template v-if="!allShipsUnlocked">ships you haven't seen and</template> bonuses from unlocking more ship
-      levels.
-    </div>
-
     <div class="mx-4 mb-2 xl:mx-0 text-xs">Note: A mission is counted in statistics once launched.</div>
 
     <div
