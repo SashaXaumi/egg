@@ -33,7 +33,7 @@
             color: contributor.farmerRole.color,
             background: 'rgba(255,255,255,0.04)',
             flexShrink: 0,
-            fontSize: '10px',
+            fontSize: '11px',
             padding: '1px 7px',
           }"
         >
@@ -120,7 +120,7 @@
           />
         </svg>
 
-        <span class="mono" style="font-size: 10px; color: var(--text-2); flex-shrink: 0">
+        <span class="mono" style="font-size: 11px; color: var(--text-2); flex-shrink: 0">
           <svg
             v-if="contributor.finalized"
             v-tippy="{ content: 'Checked in after reaching the goal' }"
@@ -149,10 +149,10 @@
           <span
             v-else-if="contributor.farmShared"
             v-tippy="{ content: 'Farm is shared but no artifact is equipped.' }"
-            style="font-size: 10px; color: var(--text-2)"
+            style="font-size: 11px; color: var(--text-2)"
             >&ndash;</span
           >
-          <span v-else style="font-size: 10px; color: var(--text-2)">Private</span>
+          <span v-else style="font-size: 11px; color: var(--text-2)">Private</span>
         </div>
 
         <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
@@ -161,7 +161,7 @@
               <span class="mono" style="color: var(--text-0); font-weight: 700; font-size: 13px">{{
                 formatEIValue(contributor.eggsLaid)
               }}</span>
-              <span class="mono" style="color: var(--text-2); font-size: 10px"
+              <span class="mono" style="color: var(--text-2); font-size: 11px"
                 >{{ formatEIValue(contributor.eggsPerHour) }}/hr</span
               >
             </div>
@@ -175,7 +175,7 @@
                 class="block"
                 :style="{ width: '13px', height: '13px' }"
               />
-              <span class="mono" style="font-size: 10px; font-weight: 700; color: var(--text-1)">{{
+              <span class="mono" style="font-size: 11px; font-weight: 700; color: var(--text-1)">{{
                 formatEIValue(contributor.offlineEggs)
               }}</span>
             </div>
