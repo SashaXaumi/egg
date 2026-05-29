@@ -4,7 +4,8 @@
     <router-view />
   </div>
   <the-footer />
-  <the-coop-selector />
+  <!-- Coop selector modal removed per request (kept registered to re-enable):
+  <the-coop-selector /> -->
   <the-notification-tray />
 </template>
 

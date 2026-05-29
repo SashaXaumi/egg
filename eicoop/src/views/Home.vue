@@ -3,6 +3,8 @@
   <main class="flex-1 max-w-ultrawide w-full mx-auto mt-6 ultrawide:px-4">
     <user-dashboard-entry-form class="mb-4" />
 
+    <!-- Trimmed per request (kept for re-enabling): Notes & instructions panel,
+         recently-viewed coops, and the contract/coop list (with its expand/collapse-all).
     <base-collapsible-panel title="Notes and instructions" :collapse="!showInstructions" :toggle="toggleInstructions">
       <ul class="list-disc pt-2 pl-5 space-y-1">
         <li class="text-green-700 dark:text-green-300">
@@ -64,6 +66,7 @@
     <recently-viewed-block class="ultrawide:rounded-lg mb-4" />
 
     <contract-list v-model:rows-per-page="rowsPerPage" :contracts="contracts" />
+    -->
   </main>
 </template>
 

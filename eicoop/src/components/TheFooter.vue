@@ -1,11 +1,13 @@
 <template>
   <footer class="py-4 text-center text-xs leading-relaxed">
+    <!-- "More Egg, Inc. tools" removed per request (kept to re-enable):
     <div class="flex items-center justify-center space-x-1">
       <base-icon icon-rel-path="egginc/icon_chick.png" :size="64" class="ChickIcon h-4 w-4" />
       <button class="text-blue-400 hover:text-blue-500 transition-none" @click="openSidewideNav">
         More Egg, Inc. tools
       </button>
     </div>
+    -->
   </footer>
 </template>
 

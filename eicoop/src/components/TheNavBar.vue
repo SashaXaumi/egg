@@ -43,6 +43,7 @@
         <div>
           <div class="ml-4 flex items-center md:ml-6">
             <div class="ml-10 flex items-baseline space-x-3">
+              <!-- Coop selector + recently-viewed removed per request (kept to re-enable):
               <coop-selector-show v-slot="scope">
                 <svg
                   v-tippy="{ content: 'Coop selector (hotkey: c)' }"
@@ -60,6 +61,7 @@
               </coop-selector-show>
 
               <the-recently-viewed-dropdown />
+              -->
 
               <the-theme-switcher />
             </div>
