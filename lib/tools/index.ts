@@ -73,7 +73,7 @@ export class Tool {
 export const tools = [
   new Tool({
     id: 'eicoop',
-    url: 'https://ferret-coop.netlify.app/',
+    url: 'https://ferret.netlify.app/',
     title: 'CoopTracker',
     iconUrl: iconURL('wasmegg/eicoop.svg'),
     description: 'Coop tracker and contract master list',
