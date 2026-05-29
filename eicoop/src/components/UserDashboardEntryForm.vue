@@ -1,21 +1,26 @@
 <template>
-  <div class="bg-white dark:bg-gray-800 shadow overflow-hidden ultrawide:rounded-lg">
+  <div
+    class="overflow-hidden"
+    style="background: var(--bg-1); border: 1px solid var(--line); border-radius: var(--r-lg)"
+  >
     <div
-      class="px-4 sm:px-6 py-3 text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700 text-sm font-medium flex items-center justify-between"
+      class="px-4 sm:px-6 py-3 text-sm font-medium flex items-center justify-between"
+      style="background: var(--bg-2); color: var(--text-0)"
     >
-      <span>
+      <span style="font-family: var(--f-display); font-weight: 600">
         Access personal dashboard
         <sup
           v-if="onboarding"
-          class="inline-flex items-center pl-0.5 text-green-500 animate-bounce"
-          :style="{ fontSize: '0.625rem', lineHeight: '0.75rem' }"
+          class="inline-flex items-center pl-0.5 animate-bounce"
+          :style="{ fontSize: '0.625rem', lineHeight: '0.75rem', color: 'var(--leaf)' }"
         >
           NEW
         </sup>
       </span>
       <button
         type="button"
-        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 focus:outline-none"
+        class="focus:outline-none"
+        style="color: var(--text-2)"
         :aria-label="collapsed ? 'Expand' : 'Collapse'"
         @click="toggleCollapse"
       >
@@ -33,8 +38,8 @@
         </svg>
       </button>
     </div>
-    <div v-show="!collapsed" class="border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3">
-      <p v-if="!isDashboard" class="text-xs text-gray-900 dark:text-gray-100 mb-2">
+    <div v-show="!collapsed" class="px-4 sm:px-6 py-3" style="border-top: 1px solid var(--line)">
+      <p v-if="!isDashboard" class="text-xs mb-2" style="color: var(--text-1)">
         Enter your ID to access a personal dashboard where the status of all your contracts, including solos and
         not-yet-joined-coops, are shown in one place. Bookmark your dashboard page to check on all your contracts at any
         time.
@@ -43,8 +48,10 @@
       <span class="flex">
         <form
           class="relative sm:max-w-xs flex items-stretch flex-grow focus-within:z-10"
-          :class="onboarding ? 'border border-green-500 rounded-md' : null"
-          :style="onboarding ? { animation: 'glowing 2s ease-in-out infinite' } : undefined"
+          :class="onboarding ? 'rounded-md' : null"
+          :style="
+            onboarding ? { border: '1px solid var(--gold)', animation: 'glowing 2s ease-in-out infinite' } : undefined
+          "
           @submit="
             $event.preventDefault();
             submit();
@@ -55,18 +62,20 @@
             v-model="userId"
             name="user_id"
             type="text"
-            class="appearance-none block w-full px-3 py-2 text-base border border-gray-300 rounded-l-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm text-gray-900 dark:text-gray-100 dark:bg-gray-700 dark:border-gray-500"
+            class="appearance-none block w-full px-3 py-2 text-base rounded-l-md shadow-sm focus:outline-none sm:text-sm"
+            style="background: var(--bg-2); border: 1px solid var(--line); border-right: none; color: var(--text-0)"
             placeholder="User ID"
             spellcheck="false"
             autocapitalize="off"
           />
           <button
             type="submit"
-            class="-ml-px relative inline-flex items-center space-x-2 px-3 py-2 border border-gray-300 dark:border-gray-500 rounded-r-md bg-blue-600 hover:bg-blue-700 !duration-0 focus:outline-none disabled:opacity-50"
+            class="-ml-px relative inline-flex items-center space-x-2 px-3 py-2 rounded-r-md !duration-0 focus:outline-none disabled:opacity-50"
+            style="background: var(--gold); color: #1a1208; border: 1px solid var(--gold)"
             :class="{ 'cursor-not-allowed': !submittable }"
             :disabled="!submittable"
           >
-            <svg class="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fill-rule="evenodd"
                 d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
@@ -83,20 +92,22 @@
           >
           </span>
         </form>
-        <base-info class="w-5 h-5 self-center" />
+        <base-info class="w-5 h-5 self-center" style="color: var(--text-2)" />
       </span>
 
       <div v-if="eids.size > 1" class="mt-3">
-        <div class="text-xs text-gray-900 dark:text-gray-100 mb-1">Recent IDs:</div>
+        <div class="text-xs mb-1" style="color: var(--text-1)">Recent IDs:</div>
         <div class="flex flex-wrap gap-2">
           <span
             v-for="[eid, name] in eids"
             :key="eid"
-            class="inline-flex items-center px-2 py-1 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-xs text-gray-800 dark:text-gray-200"
+            class="inline-flex items-center px-2 py-1 rounded-full text-xs"
+            style="background: var(--bg-2); border: 1px solid var(--line); color: var(--text-1)"
           >
             <button
               type="button"
-              class="mr-1 text-gray-400 hover:text-blue-500 focus:outline-none"
+              class="mr-1 focus:outline-none"
+              style="color: var(--text-2)"
               aria-label="Edit name"
               @click="eidsStore.editName(eid, name)"
             >
@@ -115,7 +126,8 @@
             </button>
             <button
               type="button"
-              class="ml-1 text-gray-400 hover:text-red-500 focus:outline-none"
+              class="ml-1 focus:outline-none"
+              style="color: var(--text-2)"
               aria-label="Remove"
               @click="eidsStore.removeEid(eid)"
             >

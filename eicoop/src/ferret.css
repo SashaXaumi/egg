@@ -1,13 +1,12 @@
 /* ─────────────────────────────────────────────────────────────
    Ferret Business Tracker — playful gamey dark theme
-   Scoped under .ferret so it does not affect the rest of the app
-   or the existing light/dark theme switcher.
-   Adapted from the claude.ai/design "Ferret coop" handoff (Variant C).
+   Tokens live on :root and the base look is applied app-wide (body),
+   matching the claude.ai/design "Ferret coop" handoff (Variant C).
    ───────────────────────────────────────────────────────────── */
 
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
 
-.ferret {
+:root {
   /* Warm dark base — like a cozy ferret burrow */
   --bg-0: #16110d; /* page */
   --bg-1: #1f1812; /* surface */
@@ -44,7 +43,19 @@
   --f-display: 'Fredoka', system-ui, sans-serif;
   --f-body: 'Nunito', system-ui, sans-serif;
   --f-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
 
+/* App-wide ferret look. */
+body {
+  background: var(--bg-0);
+  color: var(--text-0);
+  font-family: var(--f-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.005em;
+}
+
+.ferret {
   font-family: var(--f-body);
   color: var(--text-0);
   background: var(--bg-0);
