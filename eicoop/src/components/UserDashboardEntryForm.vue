@@ -7,16 +7,7 @@
       class="px-4 sm:px-6 py-3 text-sm font-medium flex items-center justify-between"
       style="background: var(--bg-2); color: var(--text-0)"
     >
-      <span style="font-family: var(--f-display); font-weight: 600">
-        Access personal dashboard
-        <sup
-          v-if="onboarding"
-          class="inline-flex items-center pl-0.5 animate-bounce"
-          :style="{ fontSize: '0.625rem', lineHeight: '0.75rem', color: 'var(--leaf)' }"
-        >
-          NEW
-        </sup>
-      </span>
+      <span style="font-family: var(--f-display); font-weight: 600"> Access personal dashboard </span>
       <button
         type="button"
         class="focus:outline-none"
@@ -48,10 +39,6 @@
       <span class="flex">
         <form
           class="relative sm:max-w-xs flex items-stretch flex-grow focus-within:z-10"
-          :class="onboarding ? 'rounded-md' : null"
-          :style="
-            onboarding ? { border: '1px solid var(--gold)', animation: 'glowing 2s ease-in-out infinite' } : undefined
-          "
           @submit="
             $event.preventDefault();
             submit();
@@ -144,14 +131,7 @@
 import { computed, defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import {
-  checkIfShouldOnboardUserDashboardFeature,
-  getSavedPlayerID,
-  savePlayerID,
-  useEidsStore,
-  getLocalStorage,
-  setLocalStorage,
-} from '@/lib';
+import { getSavedPlayerID, savePlayerID, useEidsStore, getLocalStorage, setLocalStorage } from '@/lib';
 import BaseInfo from 'ui/components/BaseInfo.vue';
 import BaseInput from 'ui/components/BaseInput.vue';
 import { PlayerIdSchema } from 'lib/schema';
@@ -168,7 +148,6 @@ export default defineComponent({
   },
   setup(_, { emit }) {
     const router = useRouter();
-    const onboarding = checkIfShouldOnboardUserDashboardFeature();
     const userId = ref(getSavedPlayerID() || '');
     const eidsStore = ref(useEidsStore());
     const eids = eidsStore.value.eids;
@@ -201,7 +180,6 @@ export default defineComponent({
     };
 
     return {
-      onboarding,
       isDashboard,
       userId,
       submittable,
@@ -214,11 +192,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-@keyframes glowing {
-  50% {
-    box-shadow: 0 0 0.4rem 0.1rem #10b981;
-  }
-}
-</style>

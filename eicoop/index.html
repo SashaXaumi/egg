@@ -19,10 +19,21 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
     />
+    <!-- Paint the ferret-dark background immediately so there's no flash of the old
+         light theme before the app bundle (and ferret.css) loads. -->
+    <style>
+      html,
+      body {
+        background-color: #16110d;
+      }
+      .app-loading {
+        color: #fbf3df;
+      }
+    </style>
   </head>
   <body>
     <div id="app" class="flex flex-col flex-1">
-      <div class="app-loading">Loading application...</div>
+      <div class="app-loading dark">Loading application...</div>
     </div>
     <script type="module" src="/src/main.ts"></script>
     <script

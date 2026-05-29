@@ -9,15 +9,13 @@
 <template>
   <div style="display: flex; flex-direction: column; gap: 6px">
     <div
-      v-for="(contributor, index) in sortedContributors"
+      v-for="contributor in sortedContributors"
       :key="contributor.id"
       class="squad-card"
       style="padding: 10px 12px; gap: 8px"
     >
-      <!-- Top line: rank · name (+ flags) · role · check-in -->
+      <!-- Top line: name (+ flags) · PE/TE · role · check-in -->
       <div style="display: flex; align-items: center; gap: 8px">
-        <div class="rank" :class="index < 3 ? 'rank-' + (index + 1) : ''">{{ index + 1 }}</div>
-
         <span class="name">
           <template v-if="devmode">
             <base-click-to-copy :text="contributor.name">
@@ -26,6 +24,32 @@
             </base-click-to-copy>
           </template>
           <template v-else>{{ contributor.name }}</template>
+        </span>
+
+        <!-- Prophecy eggs (PE) + eggs of truth (TE) — player power at a glance -->
+        <span
+          v-tippy="{ content: 'Prophecy eggs' }"
+          class="mono"
+          style="display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 11px; color: var(--text-1)"
+        >
+          <base-icon
+            icon-rel-path="egginc/egg_of_prophecy.png"
+            :size="64"
+            class="block"
+            :style="{ width: '13px', height: '13px' }"
+          />{{ contributor.eop }}
+        </span>
+        <span
+          v-tippy="{ content: 'Eggs of truth' }"
+          class="mono"
+          style="display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 11px; color: var(--text-1)"
+        >
+          <base-icon
+            icon-rel-path="egginc/egg_truth.png"
+            :size="64"
+            class="block"
+            :style="{ width: '13px', height: '13px' }"
+          />{{ contributor.eot }}
         </span>
 
         <!-- Autojoiner in private coop -->
@@ -163,9 +187,6 @@
                 formatEIValue(contributor.offlineEggs)
               }}</span>
             </div>
-            <span class="display" style="color: var(--leaf); font-size: 12px; flex-shrink: 0"
-              >{{ playerPct(contributor.eggsLaid) }}%</span
-            >
           </div>
           <div class="bar" style="height: 3px">
             <div class="fill" :style="{ width: playerPct(contributor.eggsLaid) + '%' }" />
