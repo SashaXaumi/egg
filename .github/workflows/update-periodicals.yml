@@ -24,12 +24,20 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
 
       - name: Fetch upstream periodicals data
         run: |
+          # Base the commit on the very latest remote main so the push
+          # fast-forwards even if main advanced since checkout (the bot and
+          # local GitHub Desktop pushes can race). We never edit periodicals/data
+          # locally, so hard-resetting to origin/main loses nothing.
+          git fetch origin "$UPSTREAM_BRANCH"
+          git reset --hard "origin/$UPSTREAM_BRANCH"
           git remote add upstream "$UPSTREAM_REPO" 2>/dev/null || git remote set-url upstream "$UPSTREAM_REPO"
           git fetch --depth=1 upstream "$UPSTREAM_BRANCH"
-          # Take upstream's version of the data directory (we never edit it locally).
+          # Take upstream's version of the data directory.
           git checkout "upstream/$UPSTREAM_BRANCH" -- periodicals/data
 
       - name: Commit changes and dispatch eicoop build
@@ -43,7 +51,12 @@ jobs:
             echo 'periodicals/data already up to date with upstream.'
           else
             git commit -m 'periodicals: sync data from upstream (carpetsage/egg)'
-            git push
+            # Re-sync to the tip and retry once in case main moved during the run.
+            git push origin HEAD:"$UPSTREAM_BRANCH" || {
+              git fetch origin "$UPSTREAM_BRANCH"
+              git rebase "origin/$UPSTREAM_BRANCH"
+              git push origin HEAD:"$UPSTREAM_BRANCH"
+            }
             # Default GITHUB_TOKEN pushes do not trigger other workflows, so kick
             # the eicoop build explicitly. Pin --repo to this fork: with an
             # `upstream` remote present, gh otherwise targets the parent repo.
