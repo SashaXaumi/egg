@@ -14,7 +14,7 @@
       class="squad-card"
       style="padding: 10px 12px; gap: 8px"
     >
-      <!-- Top line: name (+ flags) · PE/TE · role · check-in -->
+      <!-- Top line: name · rank · PE — then flags + check-in pushed right -->
       <div style="display: flex; align-items: center; gap: 8px">
         <span class="name">
           <template v-if="devmode">
@@ -26,7 +26,21 @@
           <template v-else>{{ contributor.name }}</template>
         </span>
 
-        <!-- Prophecy eggs (PE) + eggs of truth (TE) — player power at a glance -->
+        <!-- Rank (farmer role) right next to the name -->
+        <span
+          class="role"
+          :style="{
+            color: contributor.farmerRole.color,
+            background: 'rgba(255,255,255,0.04)',
+            flexShrink: 0,
+            fontSize: '10px',
+            padding: '1px 7px',
+          }"
+        >
+          {{ contributor.farmerRole.name.replace('farmer', '') }}
+        </span>
+
+        <!-- Prophecy eggs (PE) — player power at a glance -->
         <span
           v-tippy="{ content: 'Prophecy eggs' }"
           class="mono"
@@ -39,18 +53,8 @@
             :style="{ width: '13px', height: '13px' }"
           />{{ contributor.eop }}
         </span>
-        <span
-          v-tippy="{ content: 'Eggs of truth' }"
-          class="mono"
-          style="display: inline-flex; align-items: center; gap: 2px; flex-shrink: 0; font-size: 11px; color: var(--text-1)"
-        >
-          <base-icon
-            icon-rel-path="egginc/egg_truth.png"
-            :size="64"
-            class="block"
-            :style="{ width: '13px', height: '13px' }"
-          />{{ contributor.eot }}
-        </span>
+
+        <span style="flex: 1" />
 
         <!-- Autojoiner in private coop -->
         <svg
@@ -116,18 +120,6 @@
           />
         </svg>
 
-        <span
-          class="role"
-          :style="{
-            color: contributor.farmerRole.color,
-            background: 'rgba(255,255,255,0.04)',
-            flexShrink: 0,
-            fontSize: '10px',
-            padding: '1px 7px',
-          }"
-        >
-          {{ contributor.farmerRole.name.replace('farmer', '') }}
-        </span>
         <span class="mono" style="font-size: 10px; color: var(--text-2); flex-shrink: 0">
           <svg
             v-if="contributor.finalized"
@@ -188,9 +180,6 @@
               }}</span>
             </div>
           </div>
-          <div class="bar" style="height: 3px">
-            <div class="fill" :style="{ width: playerPct(contributor.eggsLaid) + '%' }" />
-          </div>
         </div>
       </div>
     </div>
@@ -201,7 +190,7 @@
 import { computed, ref, toRefs, inject, Ref } from 'vue';
 
 import { ArtifactSet, CoopStatus, boostIconPath, boostName, eggIconPath, ei, formatEIValue } from '@/lib';
-import { getSessionStorage, setSessionStorage, formatWithThousandSeparators, renderNonempty, goalPercent } from '@/utils';
+import { getSessionStorage, setSessionStorage, formatWithThousandSeparators, renderNonempty } from '@/utils';
 import { devmodeKey } from '@/symbols';
 import BaseClickToCopy from '@/components/BaseClickToCopy.vue';
 import BaseIcon from 'ui/components/BaseIcon.vue';
@@ -248,9 +237,6 @@ const props = defineProps<{ egg: ei.Egg; coopStatus: CoopStatus; target: number;
 
 const { egg, coopStatus, target, customEggId } = toRefs(props);
 const devmode = inject(devmodeKey);
-
-// Per-player progress toward the coop goal (used by the compact rows).
-const playerPct = (eggs: number) => goalPercent(eggs, target.value);
 
 const showOptionalColumn = computed(() => {
   const show = Object.fromEntries(

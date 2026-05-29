@@ -17,33 +17,35 @@
           class="hero-egg"
         />
 
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
-          <span v-if="!leagueStatus.hasEnded" class="chip chip-live">Live</span>
+        <!-- Coop name with the grade + open/full badge alongside it -->
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; max-width: 80%; margin: 4px 0 12px">
+          <h1 class="display hero-title" style="margin: 0; max-width: none">
+            <base-click-to-copy :text="status.contractId" style="color: var(--text-0)">
+              {{ contract.name }}
+              <template #tooltip> Copy contract ID &lsquo;{{ status.contractId }}&rsquo; to clipboard </template>
+            </base-click-to-copy>
+          </h1>
           <template v-if="grade">
             <contract-grade-label :grade="grade" class="inline-block relative h-7" />
           </template>
           <template v-else-if="league !== null">
             <contract-league-label :league="league" />
           </template>
-          <span
-            v-if="contract.maxCoopSize && !leagueStatus.hasEnded"
-            class="chip"
-            :style="{
-              color: openings > 0 ? 'var(--leaf)' : 'var(--text-2)',
-              borderColor: openings > 0 ? 'rgba(74,222,128,0.28)' : 'var(--line)',
-            }"
-          >
-            <template v-if="openings > 0">{{ openings }} open</template>
-            <template v-else>Full</template>
-          </span>
+          <!-- Open/Full badge removed per request (wrapped v-if="false" to re-enable). -->
+          <template v-if="false">
+            <span
+              v-if="contract.maxCoopSize && !leagueStatus.hasEnded"
+              class="chip"
+              :style="{
+                color: openings > 0 ? 'var(--leaf)' : 'var(--text-2)',
+                borderColor: openings > 0 ? 'rgba(74,222,128,0.28)' : 'var(--line)',
+              }"
+            >
+              <template v-if="openings > 0">{{ openings }} open</template>
+              <template v-else>Full</template>
+            </span>
+          </template>
         </div>
-
-        <h1 class="display hero-title">
-          <base-click-to-copy :text="status.contractId" style="color: var(--text-0)">
-            {{ contract.name }}
-            <template #tooltip> Copy contract ID &lsquo;{{ status.contractId }}&rsquo; to clipboard </template>
-          </base-click-to-copy>
-        </h1>
 
         <!-- Expected check-in time (most important number) -->
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; max-width: 80%">
@@ -63,7 +65,7 @@
                 <path d="M12 7v5l3 2" />
               </svg>
             </span>
-            <span class="caption"> expected </span>
+            <span class="caption"> end at </span>
             <span class="mono display" style="font-size: 14px; color: var(--gold)">{{ expectedClock }}</span>
             <template #content>
               <p>
@@ -73,7 +75,7 @@
               </p>
             </template>
           </tippy>
-          <span style="font-size: 11px; color: var(--text-2); font-weight: 600; white-space: nowrap">
+          <span style="font-size: 14px; color: var(--text-2); font-weight: 600; white-space: nowrap">
             in
             <span class="mono" style="color: var(--text-1); font-weight: 700">{{
               formatDuration(leagueStatus.expectedTimeToCompleteOfflineAdjusted)
@@ -85,7 +87,7 @@
         <div style="display: flex; justify-content: space-between; margin-bottom: 8px; align-items: baseline; gap: 8px">
           <div style="display: flex; gap: 6px; align-items: baseline; white-space: nowrap">
             <span class="display" style="font-size: 18px; color: var(--leaf)">{{ teamProgressPct }}%</span>
-            <span style="font-size: 11px; color: var(--text-2); font-weight: 700">business</span>
+            <span style="font-size: 11px; color: var(--text-2); font-weight: 700">completed</span>
           </div>
           <span class="caption" style="color: var(--text-3); white-space: nowrap">
             Ends in
@@ -173,19 +175,26 @@
           />
         </template>
       </svg>
+      <!-- Share link removed per request (component kept registered to re-enable):
       <coop-card-share-sheet
         :contract-id="status.contractId"
         :coop-code="status.coopCode"
         :end-time="leagueStatus.expectedFinalCompletionDateOfflineAdjusted.unix()"
       />
+      -->
       <span style="flex: 1" />
       <auto-refreshed-relative-time :reference-time="status.refreshTime">
         <template #default="{ relativeTime, referenceTimeFormatted, triggerRefresh }">
           <span class="flex items-center space-x-1" style="color: var(--text-2)">
-            <span v-tippy="{ content: `Last refreshed ${referenceTimeFormatted}` }" class="cursor-help truncate">
+            <span
+              v-if="!fromDashboard"
+              v-tippy="{ content: `Last refreshed ${referenceTimeFormatted}` }"
+              class="cursor-help truncate"
+            >
               Refreshed {{ relativeTime }}
             </span>
             <svg
+              v-if="!fromDashboard"
               v-tippy="{ content: 'Refresh' }"
               fill="none"
               viewBox="0 0 24 24"
@@ -219,7 +228,7 @@
       />
     </div>
 
-    <div class="footer-note"><span class="paw">⌒</span> burrowed by ferrets</div>
+    <div v-if="!fromDashboard" class="footer-note"><span class="paw">⌒</span> burrowed by ferrets</div>
   </div>
 </template>
 
@@ -288,6 +297,12 @@ export default defineComponent({
     status: {
       type: Object as PropType<CoopStatus>,
       required: true,
+    },
+    // When embedded in the user dashboard, suppress the per-card footer so the single
+    // "burrowed by ferrets" footer lives only at the very bottom (the den block).
+    fromDashboard: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props) {

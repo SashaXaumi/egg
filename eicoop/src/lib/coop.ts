@@ -252,9 +252,10 @@ export class Contributor {
   offlineEggs: number;
   recentlyActive: boolean;
   finalized: boolean;
-  // Eggs of prophecy (eop) and eggs of truth (eot) — a proxy for a player's power.
+  // Prophecy eggs (from the contributor's farm info) — a proxy for player power.
+  // NB: the coop API leaves the top-level `eop`/`eot` fields empty; prophecy eggs
+  // are only in farm_info, and eggs of truth aren't returned at all.
   eop: number;
-  eot: number;
 
   constructor(contributor: ei.ContractCoopStatusResponse.IContributionInfo) {
     this.id = contributor.userId!;
@@ -266,8 +267,7 @@ export class Contributor {
     this.tokens = contributor.boostTokens ?? contributor.farmInfo?.boostTokensOnHand ?? 0;
     this.recentlyActive = contributor.recentlyActive ?? false;
     this.finalized = contributor.finalized ?? false;
-    this.eop = contributor.eop ?? 0;
-    this.eot = contributor.eot ?? 0;
+    this.eop = Number(contributor.farmInfo?.eggsOfProphecy ?? 0);
     this.autojoined = contributor.autojoined ?? false;
     this.isActive = contributor.active!;
     this.isTimeCheating = contributor.timeCheatDetected!;

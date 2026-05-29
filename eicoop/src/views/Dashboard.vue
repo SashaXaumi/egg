@@ -1,14 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="flex-1 max-w-ultrawide w-full mx-auto mt-6 ultrawide:px-4">
-    <div
-      v-if="!userId"
-      class="ferret"
-      :style="{ textAlign: 'center', color: 'var(--text-2)', padding: '48px 16px', fontSize: '14px', lineHeight: 1.6 }"
-    >
-      Open settings (the gear, top-right) and enter your Egg, Inc. player ID to see your coops.
-    </div>
-    <div v-else-if="backup" class="relative -my-px py-px">
+  <div class="flex-1 max-w-ultrawide w-full mx-auto mt-2 ultrawide:px-4">
+    <!-- Entry form removed per request; a dashboard is still reachable via /u/<eid>
+         or a previously-saved ID (component kept registered to re-enable):
+    <user-dashboard-entry-form class="block my-4" @submit="setUserId" /> -->
+    <div v-if="backup" class="relative -my-px py-px">
       <main>
         <user-dashboard :backup="backup" />
         <!-- FAQ dropped per Variant C redesign (kept on the pre-login landing above):

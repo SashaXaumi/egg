@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <coop-card v-if="coopStatus" :status="coopStatus" />
+    <coop-card v-if="coopStatus" :status="coopStatus" :from-dashboard="fromDashboard" />
     <coop-card-skeleton v-else :contract-id="contractId" :coop-code="coopCode" :contract="knownContract" />
     <div
       v-if="loading || error"
@@ -60,6 +60,11 @@ export default defineComponent({
     refreshKey: {
       type: Number,
       default: 0,
+    },
+    // Passed to CoopCard to suppress its per-card footer on the dashboard.
+    fromDashboard: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: {
