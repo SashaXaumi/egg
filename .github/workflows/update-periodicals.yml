@@ -45,6 +45,7 @@ jobs:
             git commit -m 'periodicals: sync data from upstream (carpetsage/egg)'
             git push
             # Default GITHUB_TOKEN pushes do not trigger other workflows, so kick
-            # the eicoop build explicitly.
-            gh workflow run build-eicoops.yml --ref "${GITHUB_REF_NAME}"
+            # the eicoop build explicitly. Pin --repo to this fork: with an
+            # `upstream` remote present, gh otherwise targets the parent repo.
+            gh workflow run build-eicoops.yml --ref "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}"
           fi
