@@ -13,6 +13,11 @@ permissions:
   contents: write
   actions: write
 
+# Only one sync at a time, so concurrent runs can't race each other's pushes.
+concurrency:
+  group: update-periodicals
+  cancel-in-progress: false
+
 env:
   UPSTREAM_REPO: https://github.com/carpetsage/egg.git
   UPSTREAM_BRANCH: main
@@ -27,38 +32,43 @@ jobs:
         with:
           ref: main
 
-      - name: Fetch upstream periodicals data
-        run: |
-          # Base the commit on the very latest remote main so the push
-          # fast-forwards even if main advanced since checkout (the bot and
-          # local GitHub Desktop pushes can race). We never edit periodicals/data
-          # locally, so hard-resetting to origin/main loses nothing.
-          git fetch origin "$UPSTREAM_BRANCH"
-          git reset --hard "origin/$UPSTREAM_BRANCH"
-          git remote add upstream "$UPSTREAM_REPO" 2>/dev/null || git remote set-url upstream "$UPSTREAM_REPO"
-          git fetch --depth=1 upstream "$UPSTREAM_BRANCH"
-          # Take upstream's version of the data directory.
-          git checkout "upstream/$UPSTREAM_BRANCH" -- periodicals/data
-
-      - name: Commit changes and dispatch eicoop build
+      - name: Sync periodicals from upstream and deploy
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           git config user.name 'github-actions'
           git config user.email 'actions@github.com'
-          git add periodicals/data
-          if git diff --cached --quiet; then
-            echo 'periodicals/data already up to date with upstream.'
-          else
+          git remote add upstream "$UPSTREAM_REPO" 2>/dev/null || git remote set-url upstream "$UPSTREAM_REPO"
+          git fetch --depth=1 upstream "$UPSTREAM_BRANCH"
+
+          pushed=""
+          for attempt in 1 2 3 4 5; do
+            # Re-base on the very latest remote main each attempt, discarding any
+            # prior failed commit, so the push is always a clean fast-forward.
+            git fetch origin "$UPSTREAM_BRANCH"
+            git reset --hard "origin/$UPSTREAM_BRANCH"
+            git checkout "upstream/$UPSTREAM_BRANCH" -- periodicals/data
+            git add periodicals/data
+            if git diff --cached --quiet; then
+              echo 'periodicals/data already up to date with upstream — nothing to do.'
+              exit 0
+            fi
             git commit -m 'periodicals: sync data from upstream (carpetsage/egg)'
-            # Re-sync to the tip and retry once in case main moved during the run.
-            git push origin HEAD:"$UPSTREAM_BRANCH" || {
-              git fetch origin "$UPSTREAM_BRANCH"
-              git rebase "origin/$UPSTREAM_BRANCH"
-              git push origin HEAD:"$UPSTREAM_BRANCH"
-            }
-            # Default GITHUB_TOKEN pushes do not trigger other workflows, so kick
-            # the eicoop build explicitly. Pin --repo to this fork: with an
-            # `upstream` remote present, gh otherwise targets the parent repo.
-            gh workflow run build-eicoops.yml --ref "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}"
+            if git push origin "HEAD:$UPSTREAM_BRANCH"; then
+              pushed=1
+              break
+            fi
+            echo "Push rejected (attempt $attempt) — main moved, re-syncing and retrying..."
+            sleep 3
+          done
+
+          if [ -z "$pushed" ]; then
+            echo 'Failed to push after 5 attempts.' >&2
+            exit 1
           fi
+
+          # Default GITHUB_TOKEN pushes do not trigger other workflows, so kick the
+          # eicoop build explicitly. Pin --repo to this fork (an `upstream` remote
+          # is present, which would otherwise make gh target the parent repo).
+          gh workflow run build-eicoops.yml --ref "$UPSTREAM_BRANCH" --repo "$GITHUB_REPOSITORY"
