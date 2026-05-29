@@ -1,9 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="flex-1 max-w-ultrawide w-full mx-auto mt-6 ultrawide:px-4">
-    <user-dashboard-entry-form @submit="setUserId" />
-    <div v-if="!userId">
-      <frequently-asked-questions />
+    <div
+      v-if="!userId"
+      class="ferret"
+      :style="{ textAlign: 'center', color: 'var(--text-2)', padding: '48px 16px', fontSize: '14px', lineHeight: 1.6 }"
+    >
+      Open settings (the gear, top-right) and enter your Egg, Inc. player ID to see your coops.
     </div>
     <div v-else-if="backup" class="relative -my-px py-px">
       <main>
@@ -81,6 +84,14 @@ export default defineComponent({
     if (userIdProp.value && userIdProp.value !== userId.value) {
       setUserId(userIdProp.value);
     }
+
+    // The global settings form navigates here with the id as a route param; react to
+    // that so an already-mounted dashboard reloads for the newly entered id.
+    watch(userIdProp, newId => {
+      if (newId && newId !== userId.value) {
+        setUserId(newId);
+      }
+    });
 
     const loading = ref(true);
     const backup: Ref<ei.IBackup | undefined> = ref(undefined);

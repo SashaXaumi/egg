@@ -176,10 +176,11 @@ export default defineComponent({
       savePlayerID(trimmedUserId);
       eidsStore.value.addEid(trimmedUserId);
       emit('submit', trimmedUserId);
-      // Only navigate if not already on dashboard
-      if (router.currentRoute.value.name !== 'dashboard' && router.currentRoute.value.name !== 'dashboard-legacy') {
-        router.push({ name: 'dashboard' });
-      }
+      // Navigate to the dashboard with the id as a route param so an already-mounted
+      // dashboard reloads for the new id (the dashboard then strips it from the URL).
+      router.push({ name: 'dashboard', params: { userId: trimmedUserId } }).catch(() => {
+        /* ignore redundant navigation */
+      });
     };
 
     const toggleCollapse = () => {

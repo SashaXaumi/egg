@@ -2,7 +2,8 @@ import { nextTick } from 'vue';
 import { createRouter, createWebHistory, RouteLocationNormalized } from 'vue-router';
 
 import { recordVisit } from 'lib';
-import Home from '@/views/Home.vue';
+// Home view retired: the landing now redirects to the dashboard. Kept on disk to re-enable.
+// import Home from '@/views/Home.vue';
 import Coop from '@/views/Coop.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import DevMode from '@/views/DevMode.vue';
@@ -18,10 +19,7 @@ const router = createRouter({
     {
       name: 'home',
       path: '/',
-      component: Home,
-      meta: {
-        title: 'CoopTracker',
-      },
+      redirect: { name: 'dashboard' },
     },
     {
       name: 'coop',
