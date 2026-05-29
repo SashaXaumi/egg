@@ -20,15 +20,7 @@
     <div style="padding: 10px 18px 0">
       <div class="section-h">
         <h2>Your den</h2>
-        <div
-          style="
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            white-space: nowrap;
-          "
-        >
+        <div class="meta" style="white-space: nowrap">
           <span class="mono" :style="{ color: role.color }">{{ role.name }}</span>
         </div>
       </div>
@@ -103,8 +95,8 @@
           gap: 4px;
           padding: 4px 10px;
           border-radius: 999px;
-          background: rgba(251, 191, 36, 0.14);
-          border: 1px solid rgba(251, 191, 36, 0.32);
+          background: var(--gold-tint);
+          border: 1px solid var(--gold-tint-border);
           color: var(--gold);
           font-weight: 700;
           cursor: pointer;

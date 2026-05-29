@@ -71,7 +71,7 @@
           <button
             type="submit"
             class="-ml-px relative inline-flex items-center space-x-2 px-3 py-2 rounded-r-md !duration-0 focus:outline-none disabled:opacity-50"
-            style="background: var(--gold); color: #1a1208; border: 1px solid var(--gold)"
+            style="background: var(--gold); color: var(--on-gold); border: 1px solid var(--gold)"
             :class="{ 'cursor-not-allowed': !submittable }"
             :disabled="!submittable"
           >

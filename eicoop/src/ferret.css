@@ -4,7 +4,8 @@
    matching the claude.ai/design "Ferret coop" handoff (Variant C).
    ───────────────────────────────────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+/* Fonts (Fredoka / Nunito / JetBrains Mono) load via a <link> in index.html so the
+   request isn't render-blocked behind this stylesheet (a CSS @import would be). */
 
 :root {
   /* Warm dark base — like a cozy ferret burrow */
@@ -32,6 +33,11 @@
   --leaf: #4ade80;
   --leaf-strip: rgba(74, 222, 128, 0.35);
   --danger: #f87171;
+
+  /* Foreground on gold/amber fills, and the reusable gold-tint pill recipe. */
+  --on-gold: #1a1208;
+  --gold-tint: rgba(251, 191, 36, 0.14);
+  --gold-tint-border: rgba(251, 191, 36, 0.32);
 
   /* Radii */
   --r-sm: 10px;
@@ -111,7 +117,7 @@ body {
 }
 .ferret .chip-grade {
   background: linear-gradient(135deg, #b45309, #fbbf24);
-  color: #1a1208;
+  color: var(--on-gold);
   border: none;
   padding: 3px 9px;
   font-family: var(--f-display);
@@ -120,7 +126,7 @@ body {
 }
 .ferret .chip-you {
   background: linear-gradient(135deg, var(--gold), var(--amber));
-  color: #1a1208;
+  color: var(--on-gold);
   border: none;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -183,6 +189,23 @@ body {
   margin-left: 6px;
   font-size: 12px;
 }
+/* Trailing meta label inside a section header. */
+.ferret .section-h .meta {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+}
+
+/* Small uppercase caption/label used throughout the cards. */
+.ferret .caption {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-2);
+}
 
 /* ───── Progress bar ───── */
 .ferret .bar {
@@ -242,8 +265,8 @@ body {
   gap: 6px;
   padding: 5px 10px 5px 8px;
   border-radius: 999px;
-  background: rgba(251, 191, 36, 0.14);
-  border: 1px solid rgba(251, 191, 36, 0.32);
+  background: var(--gold-tint);
+  border: 1px solid var(--gold-tint-border);
   white-space: nowrap;
 }
 .ferret .stat-tile {
@@ -296,7 +319,7 @@ body {
 }
 .ferret .squad-card.you {
   background: linear-gradient(180deg, rgba(251, 191, 36, 0.07), var(--bg-1));
-  border-color: rgba(251, 191, 36, 0.32);
+  border-color: var(--gold-tint-border);
   box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.12), 0 14px 28px -20px rgba(251, 191, 36, 0.4);
 }
 .ferret .rank {
@@ -314,15 +337,15 @@ body {
 }
 .ferret .rank-1 {
   background: linear-gradient(135deg, #fbbf24, #d97706);
-  color: #1a1208;
+  color: var(--on-gold);
 }
 .ferret .rank-2 {
   background: linear-gradient(135deg, #d4d4d8, #71717a);
-  color: #1a1208;
+  color: var(--on-gold);
 }
 .ferret .rank-3 {
   background: linear-gradient(135deg, #cd7f32, #8b4513);
-  color: #1a1208;
+  color: var(--on-gold);
 }
 .ferret .squad-card .name {
   font-family: var(--f-display);

@@ -63,17 +63,7 @@
                 <path d="M12 7v5l3 2" />
               </svg>
             </span>
-            <span
-              style="
-                font-size: 10px;
-                color: var(--text-2);
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-              "
-            >
-              expected
-            </span>
+            <span class="caption"> expected </span>
             <span class="mono display" style="font-size: 14px; color: var(--gold)">{{ expectedClock }}</span>
             <template #content>
               <p>
@@ -97,16 +87,7 @@
             <span class="display" style="font-size: 18px; color: var(--leaf)">{{ teamProgressPct }}%</span>
             <span style="font-size: 11px; color: var(--text-2); font-weight: 700">business</span>
           </div>
-          <span
-            style="
-              font-size: 10px;
-              color: var(--text-3);
-              font-weight: 700;
-              text-transform: uppercase;
-              letter-spacing: 0.06em;
-              white-space: nowrap;
-            "
-          >
+          <span class="caption" style="color: var(--text-3); white-space: nowrap">
             Ends in
             <span class="mono" style="color: var(--text-1)">{{ formatDuration(max(status.secondsRemaining, 0)) }}</span>
           </span>
@@ -228,20 +209,7 @@
     <div style="padding: 16px 18px 4px">
       <div class="section-h">
         <h2>Business <small>{{ status.contributors.length }}/{{ contract.maxCoopSize }}</small></h2>
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--text-2);
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-          "
-        >
-          Shipped
-        </div>
+        <div class="meta">Shipped</div>
       </div>
       <coop-card-contribution-table
         :egg="egg"
@@ -263,14 +231,13 @@ import { CoopStatus, eggIconPath, formatEIValue, formatDuration, getModifiers } 
 import { getLocalStorageNoPrefix, setLocalStorageNoPrefix } from 'lib';
 import { completionStatusFgColorClass, completionStatusBgColorClass } from '@/styles';
 import { devmodeKey } from '@/symbols';
-import { eggTooltip } from '@/utils';
+import { eggTooltip, goalPercent } from '@/utils';
 import BaseIcon from 'ui/components/BaseIcon.vue';
 import BaseWarning from 'ui/components/BaseWarning.vue';
 import ContractLeagueLabel from '@/components/ContractLeagueLabel.vue';
 import ContractGradeLabel from '@/components/ContractGradeLabel.vue';
 import ContractStatusLabel from '@/components/ContractStatusLabel.vue';
 import CoopCardShareSheet from '@/components/CoopCardShareSheet.vue';
-import ContractProgressBar from '@/components/ContractProgressBar.vue';
 import CoopCardContributionTable from '@/components/CoopCardContributionTable.vue';
 import BaseClickToCopy from '@/components/BaseClickToCopy.vue';
 import AutoRefreshedRelativeTime from '@/components/AutoRefreshedRelativeTime.vue';
@@ -312,7 +279,6 @@ export default defineComponent({
     ContractGradeLabel,
     ContractStatusLabel,
     CoopCardShareSheet,
-    ContractProgressBar,
     CoopCardContributionTable,
     BaseClickToCopy,
     AutoRefreshedRelativeTime,
@@ -356,7 +322,7 @@ export default defineComponent({
     });
 
     // ── Hero-specific derived values (Variant C) ──
-    const pct = (n: number) => Math.max(0, Math.min(Math.round((n / leagueStatus.value.finalTarget) * 100), 100));
+    const pct = (n: number) => goalPercent(n, leagueStatus.value.finalTarget);
     const teamProgressPct = computed(() => pct(status.value.eggsLaid));
     const barConfirmed = computed(() => pct(status.value.eggsLaid));
     const barEstimated = computed(() => pct(status.value.eggsLaidOfflineAdjusted));

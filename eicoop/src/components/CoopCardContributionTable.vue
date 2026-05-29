@@ -94,8 +94,13 @@
 
         <span
           class="role"
-          :style="{ color: contributor.farmerRole.color, background: 'rgba(255,255,255,0.04)', flexShrink: 0 }"
-          style="font-size: 10px; padding: 1px 7px"
+          :style="{
+            color: contributor.farmerRole.color,
+            background: 'rgba(255,255,255,0.04)',
+            flexShrink: 0,
+            fontSize: '10px',
+            padding: '1px 7px',
+          }"
         >
           {{ contributor.farmerRole.name.replace('farmer', '') }}
         </span>
@@ -175,7 +180,7 @@
 import { computed, ref, toRefs, inject, Ref } from 'vue';
 
 import { ArtifactSet, CoopStatus, boostIconPath, boostName, eggIconPath, ei, formatEIValue } from '@/lib';
-import { getSessionStorage, setSessionStorage, formatWithThousandSeparators, renderNonempty } from '@/utils';
+import { getSessionStorage, setSessionStorage, formatWithThousandSeparators, renderNonempty, goalPercent } from '@/utils';
 import { devmodeKey } from '@/symbols';
 import BaseClickToCopy from '@/components/BaseClickToCopy.vue';
 import BaseIcon from 'ui/components/BaseIcon.vue';
@@ -224,7 +229,7 @@ const { egg, coopStatus, target, customEggId } = toRefs(props);
 const devmode = inject(devmodeKey);
 
 // Per-player progress toward the coop goal (used by the compact rows).
-const playerPct = (eggs: number) => Math.max(0, Math.min(Math.round((eggs / target.value) * 100), 100));
+const playerPct = (eggs: number) => goalPercent(eggs, target.value);
 
 const showOptionalColumn = computed(() => {
   const show = Object.fromEntries(

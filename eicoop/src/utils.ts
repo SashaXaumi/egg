@@ -27,6 +27,11 @@ export function iconURL(relpath: string, size: number | string = 'orig'): string
   return `https://eggincassets.pages.dev/${size}/${relpath}`;
 }
 
+// Progress toward a goal as a whole-number percent, clamped to 0–100.
+export function goalPercent(value: number, target: number): number {
+  return Math.max(0, Math.min(Math.round((value / target) * 100), 100));
+}
+
 export function eggTooltip(egg: ei.Egg, custom_egg_id?: string | null): string {
   const value = eggValue(egg, custom_egg_id);
   const valueDisplay =
