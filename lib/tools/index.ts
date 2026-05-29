@@ -83,29 +83,6 @@ export const tools = [
     updateUntil: 1638811910000,
     whatsNew: 'Grade detection works again',
   }),
-
-  new Tool({
-    id: 'virtue-companion',
-    title: 'Virtue Companion',
-    url: '/virtue-companion/',
-    iconUrl: iconURL('egginc/egg_truth.png', 64),
-    description: 'Companion for tracking virtue progress',
-    iconCssClasses: 'h-5 w-5',
-    majorUpdateUntil: 1764547200,
-    updateUntil: 1638811910000,
-    whatsNew: 'New Tool: Virtue Companion!',
-  }),
-  new Tool({
-    id: 'rockets-tracker',
-    title: 'Rockets tracker',
-    url: '/rockets-tracker/',
-    iconUrl: iconURL('wasmegg/rockets-tracker.svg'),
-    description:
-      'Tracker for active rocket missions, historical mission statistics, progress on artifact collection, etc.',
-    // forever
-    updateUntil: 1637780082000,
-    whatsNew: 'Fixed crafting expense and crafting count.',
-  }),
 ];
 
 export const idToTool = new Map<string, Tool>(tools.map(t => [t.id, t]));

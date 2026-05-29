@@ -38,8 +38,8 @@
 
     <div class="text-center break-words text-sm text-gray-700 dark:text-gray-200">
       If you believe this is a bug,
-      <a href="https://ferret.netlify.app/#/contact" target="_blank" class="text-blue-500"
-        >contact @carpetsage</a
+      <a href="https://github.com/SashaXaumi/egg/issues" target="_blank" class="text-blue-500"
+        >report it on GitHub</a
       >.
     </div>
   </div>

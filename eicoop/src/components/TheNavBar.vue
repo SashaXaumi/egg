@@ -9,6 +9,7 @@
             </router-link>
           </div>
 
+          <!-- Related-links menu removed: it only linked to the now-removed wasmegg tools.
           <button
             type="button"
             class="block text-gray-300 focus:outline-none focus:ring-1 focus:ring-inset focus:ring-gray-300 ml-1.5 relative"
@@ -22,6 +23,7 @@
             />
             <base-ping v-if="!sitewideNavUsed" />
           </button>
+          -->
 
           <svg
             v-if="devmode"
@@ -67,6 +69,7 @@
     </div>
   </nav>
 
+  <!-- Related-links sidebar removed (standalone coop tracker; siblings were removed).
   <nav-bar-sidebar
     :open="sitewideNavOpen"
     active-entry-id="eicoop"
@@ -80,6 +83,7 @@
       }
     "
   />
+  -->
 </template>
 
 <script lang="ts">

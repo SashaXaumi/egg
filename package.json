@@ -21,10 +21,7 @@
   },
   "workspaces": [
     "lib",
-    "eicoop",
-    "wasmegg/_home",
-    "wasmegg/rockets-tracker",
-    "wasmegg/virtue-companion"
+    "eicoop"
   ],
   "packageManager": "pnpm@11.1.1"
 }

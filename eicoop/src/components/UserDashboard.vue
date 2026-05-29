@@ -121,21 +121,6 @@
         </svg>
         Refresh
       </button>
-      <span style="flex: 1; min-width: 0" />
-      <span style="display: inline-flex; align-items: center; gap: 12px">
-        <a
-          v-for="[href, description] in [
-            [`https://ferret.netlify.app/rockets-tracker/?playerId=${userId}`, 'Missions & inventory'],
-            ['https://ferret.netlify.app/', 'More tools'],
-          ]"
-          :key="href"
-          :href="href"
-          target="_blank"
-          style="color: var(--cinnamon); white-space: nowrap"
-        >
-          {{ description }} &#8599;
-        </a>
-      </span>
     </div>
 
     <div

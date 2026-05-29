@@ -2,9 +2,6 @@ packages:
   - lib
   - ui
   - eicoop
-  - wasmegg/_home
-  - wasmegg/rockets-tracker
-  - wasmegg/virtue-companion
 
 allowBuilds:
   esbuild: true
