@@ -4,6 +4,7 @@ import {
   requestContractsArchive,
   requestFirstContact,
   resolveContractsInBackup,
+  resolveContractPlayerInfo,
   resolveLocalContracts,
   UserBackupEmptyError,
 } from 'lib';
@@ -21,6 +22,9 @@ export async function getUserBackup(userId: string): Promise<ei.IBackup> {
     throw new Error(`${userId}: no farm info in backup`);
   }
   await resolveContractsInBackup(backup, userId);
+  // The game API no longer populates backup.contracts.lastCpi; fetch it
+  // separately so the den's grade / season-progress strip keeps working.
+  await resolveContractPlayerInfo(backup, userId);
   return backup;
 }
 

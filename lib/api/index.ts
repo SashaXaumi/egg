@@ -120,6 +120,44 @@ export async function resolveContractsInBackup(backup: ei.IBackup, userId?: stri
   await resolveLocalContracts(all, userId);
 }
 
+/**
+ * Fetches the player's contract-player info (grade, total/season CXP, soul
+ * power, season progress, etc.) from the authenticated
+ * `/ei_ctx/get_contract_player_info` endpoint.
+ *
+ * As of a game-API change, the backup payload no longer populates
+ * `backup.contracts.lastCpi`, so this must be fetched separately. The response
+ * is the same `ContractPlayerInfo` object that used to live in the backup.
+ * (Ported from upstream carpetsage/egg. Our same-origin /api proxy reaches
+ * /ei_ctx/* directly, so no separate auth worker is needed.)
+ */
+export async function requestContractPlayerInfo(userId?: string): Promise<ei.IContractPlayerInfo> {
+  userId = userId ?? defaultUserId;
+  const requestPayload = basicRequestInfo(userId);
+  const encodedRequestPayload = encodeMessage(ei.BasicRequestInfo, requestPayload);
+  const encodedResponsePayload = await request('/ei_ctx/get_contract_player_info', encodedRequestPayload);
+  return decodeMessage(ei.ContractPlayerInfo, encodedResponsePayload, true) as ei.IContractPlayerInfo;
+}
+
+/**
+ * Fetches the player's ContractPlayerInfo and writes it back into the backup as
+ * `backup.contracts.lastCpi` (mutating in place), so the rest of the codebase
+ * can keep reading `backup.contracts.lastCpi` as if the backup had populated it.
+ * Call after requestFirstContact + resolveContractsInBackup. On failure,
+ * `lastCpi` is left untouched (callers see the same null state as before).
+ */
+export async function resolveContractPlayerInfo(backup: ei.IBackup, userId?: string): Promise<void> {
+  try {
+    const cpi = await requestContractPlayerInfo(userId);
+    if (!backup.contracts) {
+      backup.contracts = {};
+    }
+    backup.contracts.lastCpi = cpi;
+  } catch (e) {
+    console.warn('Failed to resolve contract player info:', e);
+  }
+}
+
 export async function requestShellShowcase(userId?: string): Promise<ei.IShellShowcaseListingSet> {
   userId = userId ?? defaultUserId;
   const requestPayload = basicRequestInfo(userId);
