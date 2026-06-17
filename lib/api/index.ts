@@ -98,7 +98,11 @@ export async function requestContractsInfo(
     clientVersion: CLIENT_VERSION,
   };
   const encodedRequestPayload = encodeMessage(ei.ContractsInfoRequest, requestPayload);
-  const encodedResponsePayload = await request('/ei_ctx/get_contracts_info', encodedRequestPayload);
+  // Authenticated endpoint: plain www.auxbrain.com returns an empty contract
+  // list for re-run/old contracts, so route through the auth worker (which
+  // returns the full definitions). Without this, coop.contract never resolves
+  // for re-runs and the dashboard falls back to a save lookup that can fail.
+  const encodedResponsePayload = await request('/ei_ctx/get_contracts_info', encodedRequestPayload, AUTH_API_ROOT);
   return decodeMessage(ei.ContractsInfoResponse, encodedResponsePayload, true) as ei.IContractsInfoResponse;
 }
 
