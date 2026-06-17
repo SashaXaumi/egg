@@ -16,6 +16,14 @@ export * from './version';
 // self-contained with no cross-origin CORS dependency.
 const API_ROOT = '/api';
 
+// A handful of /ei_ctx/* endpoints (notably get_contract_player_info) are
+// authenticated and reject unsigned requests to www.auxbrain.com with HTTP 400.
+// carpet's auth worker signs them and forwards to auxbrain; it sets
+// Access-Control-Allow-Origin: *, so the browser may call it cross-origin.
+// Only the endpoints that REQUIRE auth use this root — the rest stay on the
+// same-origin /api proxy (the worker 403s e.g. get_contracts_archive).
+const AUTH_API_ROOT = 'https://egg-auth-worker.carpet.workers.dev';
+
 const CONFIG_GIST_URL =
   'https://gist.githubusercontent.com/carpetsage/373992bc6c5e00f8abd39dfb752845c0/raw/config.json';
 const TIMEOUT = 30000;
@@ -27,13 +35,15 @@ export const defaultUserId = atob('RUk2MjkxOTQwOTY4MjM1MDA4');
  * Makes an API request.
  * @param endpoint - Path of API endpoint, e.g. /ei/coop_status.
  * @param encodedPayload - base64-encoded request payload.
+ * @param apiRoot - Optional root URL override (defaults to the same-origin /api
+ *   proxy). Used to route authenticated /ei_ctx/* endpoints via AUTH_API_ROOT.
  * @returns base64-encoded response payload.
  * @throws Throws an error on network failure (including timeout) or non-2XX response.
  */
-export async function request(endpoint: string, encodedPayload: string): Promise<string> {
+export async function request(endpoint: string, encodedPayload: string, apiRoot?: string): Promise<string> {
   const controller = new AbortController();
   setTimeout(() => controller.abort(), TIMEOUT);
-  const url = API_ROOT + endpoint;
+  const url = (apiRoot ?? API_ROOT) + endpoint;
   try {
     const resp = await fetch(url, {
       method: 'POST',
@@ -128,14 +138,19 @@ export async function resolveContractsInBackup(backup: ei.IBackup, userId?: stri
  * As of a game-API change, the backup payload no longer populates
  * `backup.contracts.lastCpi`, so this must be fetched separately. The response
  * is the same `ContractPlayerInfo` object that used to live in the backup.
- * (Ported from upstream carpetsage/egg. Our same-origin /api proxy reaches
- * /ei_ctx/* directly, so no separate auth worker is needed.)
+ * (Ported from upstream carpetsage/egg.) This endpoint is authenticated:
+ * www.auxbrain.com returns HTTP 400 for unsigned requests, so it is routed
+ * through AUTH_API_ROOT (carpet's auth worker) rather than the /api proxy.
  */
 export async function requestContractPlayerInfo(userId?: string): Promise<ei.IContractPlayerInfo> {
   userId = userId ?? defaultUserId;
   const requestPayload = basicRequestInfo(userId);
   const encodedRequestPayload = encodeMessage(ei.BasicRequestInfo, requestPayload);
-  const encodedResponsePayload = await request('/ei_ctx/get_contract_player_info', encodedRequestPayload);
+  const encodedResponsePayload = await request(
+    '/ei_ctx/get_contract_player_info',
+    encodedRequestPayload,
+    AUTH_API_ROOT
+  );
   return decodeMessage(ei.ContractPlayerInfo, encodedResponsePayload, true) as ei.IContractPlayerInfo;
 }
 
